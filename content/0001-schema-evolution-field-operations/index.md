@@ -256,6 +256,13 @@ record](http://openregister.github.io/specification/#ct-verify-record).
 TODO: Address the record verification by either removing the idea or reworking
 the meaning of a projection.
 
+TODO: If we decide Record proofs need to be kept, we need to seriously assess
+the direction the REST API should take: only plumbing access to data or both
+plumbing and porcelain. The latter being a ready-to-consume data as intended
+by the Custodian. In spirit like git's
+https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain
+
+
 #### Lens resource
 
 The introduction of lenses will require adding a new Lens resource and a
