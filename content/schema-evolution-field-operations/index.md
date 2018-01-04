@@ -1,8 +1,10 @@
-# Schema Evolution: Field operations
+---
+rfc: 0001
+start_date: 2017-11-17
+status: draft
+---
 
-- RFC: 0001
-- Start Date: 2017-11-17
-- Status: Draft
+# Schema Evolution: Field operations
 
 ## Summary
 
@@ -88,8 +90,7 @@ schema](#addition-of-a-field-to-the-schema) and
 [`Lens.validate`](#lens-validate-function).
 
 As a consequence, any projection of an [item](#item) through the lens will
-include this new field if and only if it has a value ([See Notes on missing
-values](#notes-on-missing-values)). For this opperation to succeed, the
+include this new field if and only if it has a value. For this opperation to succeed, the
 [schema](#schema) has to have a [field](#field) with the [field
 id](#field-id).
 
@@ -267,39 +268,6 @@ https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain
 
 The introduction of lenses will require adding a new Lens resource and a
 way to get it. E.g. `/lenses`, `/lenses/{id}`.
-
-
-### Notes on missing values
-
-TODO:
-
-* A-mark: Missing and applicable => Unknown, Null
-* I-mark: Missing and inapplicable => NA (or an explicit value so no longer
-  _missing_).
-
-Can we answer the following?
-
-* What kind of information is missing?
-* What is the main reason for being missing?
-
-The first, assumed we are talking about atomic/datum type, could be inferred
-from the schema. Contextual “kind” or composite “kind” sounds unlikely as it
-would require domain knowledge.
-The second requires domain knowledge, so unlikely to have a systematic
-solution.
-
-Assuming the above, this document only deals with A-marks in the addition
-operation.
-
-> The semantics of the fact that a datum is missing are not the same as the
-> semantics of the datum itself.
-
-Application of equality:  (1) semantic equality and (2) symbolic equality.
-* Semantic equality needs context (domain knowledge).
-* Symbolic equality can be applied systematically with a 4-value logic: (true,
-  false, A-mark, I-mark).
-
-It probably doesn’t matter in terms of what Registers tries to offer.
 
 
 ## Glossary
