@@ -40,7 +40,11 @@ solve references for:
   you would consider reasonable to list with a solution like (b). E.g you need
   to reference a few hundreds or records.
 * From one record to a group of records that is the combination of multiple
-  registers. E.g. you need to reference to "all local authorities".
+  registers. E.g. you need to reference to “all local authorities”.
+* From one record to a group of records that is some subset of a register (or
+  registers), where the subset is defined relative to the contents of
+  that/those registers. E.g. you need to reference all schools of type “grant
+  maintained”.
 
 Any record with the field “organisation” pointing to a CURIe for `register` or
 with the field name stating “en bloc” you can find in
