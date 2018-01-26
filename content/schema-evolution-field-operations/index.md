@@ -270,9 +270,9 @@ The introduction of lenses will require adding a new Lens resource and a
 way to get it. E.g. `/lenses`, `/lenses/{id}`.
 
 
-## Glossary
+## <a id="glossary">Glossary</a>
 
-### Datatype
+### <a id="datatype">Datatype</a>
 
 Let `DataType` be any of the datatypes defined in the
 [specification](http://openregister.github.io/specification/#datatypes). For
@@ -282,7 +282,7 @@ brevity, the RFC will express it as a union of strings and numbers.
 type DataType = String | Number
 ```
 
-### Field ID
+### <a id="field-id">Field ID</a>
 
 Let `Id` be any valid field id, [field name in the
 specification](http://openregister.github.io/specification/#fieldname-datatype).
@@ -291,7 +291,7 @@ specification](http://openregister.github.io/specification/#fieldname-datatype).
 type Id
 ```
 
-### Field
+### <a id="field">Field</a>
 
 Let `Field` be a pair of `Id` and `DataType`. Although a Field has more data
 than just name and type, for the purpose of this document, we can simplify its
@@ -301,7 +301,7 @@ definition.
 type Field = (Id, DataType)
 ```
 
-### Schema
+### <a id="schema">Schema</a>
 
 Let `Schema` be the set of fields allowed in items. A schema has a required
 primary field and optionally a set of fields (unique by `Id`). We will
@@ -311,7 +311,7 @@ consider the first field, the primary field.
 type Schema = Schema (Set Field)
 ```
 
-### Lens
+### <a id="lens">Lens</a>
 
 Let `Lens` be an ordered set of `Id` defined in the schema.
 
@@ -319,7 +319,7 @@ Let `Lens` be an ordered set of `Id` defined in the schema.
 type Lens = Lens (List Id)
 ```
 
-### Item
+### <a id="item">Item</a>
 
 Let `Item` be a data set conforming to the schema.
 
@@ -330,7 +330,7 @@ type Item = Item (Set (Id, value))
 Where `value` is any valid value for the corresponding datatype defined in the
 schema.
 
-### Entry
+### <a id="entry">Entry</a>
 
 Let `Entry` be a set as defined in the spec.
 
@@ -343,7 +343,7 @@ type Entry =
   }
 ```
 
-### Record
+### <a id="record">Record</a>
 
 Let `Record` be the composite of an item projection and an entry.
 
@@ -356,12 +356,12 @@ type Record =
   }
 ```
 
-### Projection
+### <a id="projection">Projection</a>
 
 A projection is an [`Item`](#item) conforming to a lens. [See
 `Lens.project`](#lens-project-function).
 
-### Schema `add` function
+### <a id="schema-add-function">Schema `add` function</a>
 
 The function `Schema.add` takes a schema and a field and returns the new
 schema.
@@ -377,7 +377,7 @@ so:
 schema' = Schema.add schema field -- schema' == schema
 ```
 
-### Lens `add` function
+### <a id="lens-add-function">Lens `add` function</a>
 
 The function `Lens.add` takes a lens, a field id, and the schema and returns
 the resulting lens if it is valid. Otherwise it returns the validation error.
@@ -388,7 +388,7 @@ Lens.add : Lens -> Id -> Schema -> Result LensError Lens
 
 If the key doesn't exist in the given schema the operation is invalid.
 
-### Lens `subtract` function
+### <a id="lens-subtract-function">Lens `subtract` function</a>
 
 The function `Lens.subtract` takes a lens and a field id. Returns the lens result
 of removing the field id.
@@ -397,7 +397,7 @@ of removing the field id.
 Lens.subtract : Lens -> Id -> Lens
 ```
 
-### Lens `validate` function
+### <a id="lens-validate-function">Lens `validate` function</a>
 
 The function `Lens.validate` takes a lens and the schema, if all field ids are
 found in the schema, then it is considered a valid lens. Otherwise it returns a
@@ -407,7 +407,7 @@ validation error.
 Lens.validate : Lens -> Schema -> Result LensError Lens
 ```
 
-### Lens `project` function
+### <a id="lens-project-function">Lens `project` function</a>
 
 The function `Lens.project` takes a lens and an item and returns an item
 conforming to the lens.
@@ -416,7 +416,7 @@ conforming to the lens.
 Lens.project : Lens -> Item -> Item
 ```
 
-### Item `add` function
+### <a id="item-add-function">Item `add` function</a>
 
 The function `Item.add` takes a list of items, a schema, a lens and an item
 and returns a new list of items if the given item is valid. Otherwise it
@@ -426,7 +426,7 @@ returns a validation error.
 Items.add : (Items, Schema, Lens) -> Item -> Result ItemError Items
 ```
 
-### Item `validate` function
+### <a id="item-validate-function">Item `validate` function</a>
 
 The function `Item.validate` takes a schema and an item and returns the same
 item if it is valid. Otherwise it returns a validation error.
@@ -435,6 +435,6 @@ item if it is valid. Otherwise it returns a validation error.
 Item.validate : Schema -> Item -> Result ItemError Item
 ```
 
-## REST API
+## <a id="rest-api">REST API</a>
 
 https://registers-docs.cloudapps.digital/#api-documentation-for-registers
