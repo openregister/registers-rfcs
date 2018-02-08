@@ -10,7 +10,7 @@ status: draft
 
 This RFC proposes a way to add and subtract fields from a Register, and
 defines the meaning of these operations. Thus, it doesn’t attempt to cover
-other field operations such as field transformation (e.g.  change the datatype
+other field operations such as field transformation (e.g. change the datatype
 of a field).
 
 Note that you can find the [glossary](#glossary) of concepts used throughout
@@ -31,25 +31,25 @@ reflect such evolution on existing and new data.
 
 ## Explanation
 
-This section will cover both [field addition](#field-addition) and [field
+This section covers both [field addition](#field-addition) and [field
 subtraction](#field-subtraction). In order to define the latter, we need to
 introduce a new concept into the Registers world: Lenses.
 
 
-### Schemas and lenses
+### <span id="schemas-and-lenses">Schemas and lenses</span>
 
 A lens is a subset of fields defined in the schema informing what parts of an
 item should be shown in a record and potentially help enforcing strict
-validation while adding new data. But, why do we need a new concept? Isn't
+validation while adding new data. But, why do we need a new concept? Aren't
 schemas enough?
 
-In short, no. The schema describes all possible fields for an item in Register
-regardless of when it was added. If we allow the removal of a field at the
-schema level, then we have to have another mechanism to keep track of all
-fields that were valid at some point so we can ensure we don't introduce a
+In short, no. The schema describes all possible fields for an item in a
+Register regardless of when it was added. If we allow the removal of a field
+at the schema level, then we have to have another mechanism to keep track of
+all fields that were valid at some point so we can ensure we don't introduce a
 new field that is incompatible with a previous field now gone. If we make
 schemas be the historical list of fields, then we need a way to express how do
-we want to _see_ data, analogous to SQL views.
+we want to _see_ the data; it is analogous to SQL views.
 
 To recap, a schema should keep track of any valid field across the log.
 
@@ -61,38 +61,24 @@ In a picture:
 ![Picture of two items projected through a lens](picture1.png)
 
 
-### Field addition
+### <span id="field-addition">Field addition</span>
 
-The addition of a field has two operations, first we add the field to the
-schema and second we add the field to the lens. Note that although the lens
+The addition operation evolves the previous mechanism defined in _the RFC for
+Adding a Field_ (TODO: Add a link to the RFC once it's approved) by adding an
+operation for adding a field to the lens. Note that although the lens
 operation depends on the success of the schema operation they don't have to
 happen one immediately after the other.
-
-#### Addition of a field to the schema
-
-The addition of a field, [`Schema.add`](#schema-add-function), adds a
-[field](#field) to the [schema](#schema).
-
-
-##### Example: Add a field to the schema
-
-```elm
-s_0 = Schema [("x", Number)]
-s_1 = Schema.add s_0 ("y", Number) -- s_1 == Schema [("x", Number), ("y", Number)]
-```
 
 ### Addition of a field to the lens
 
 The addition of a field, [`Lens.add`](#lens-add-function), adds a [field
-id](#field-id) to the [lens](#lens). Note it requires the field to
-exist in the [schema](#schema). See [Addition of a field to the
-schema](#addition-of-a-field-to-the-schema) and
-[`Lens.validate`](#lens-validate-function).
+id](#field-id) to the [lens](#lens).
 
 As a consequence, any projection of an [item](#item) through the lens will
-include this new field if and only if it has a value. For this opperation to succeed, the
-[schema](#schema) has to have a [field](#field) with the [field
-id](#field-id).
+include this new field if and only if it has a value. For this opperation to
+succeed, the [schema](#schema) has to have a [field](#field) with the [field
+id](#field-id) as described in the [`Lens.validate`](#lens-validate-function)
+function.
 
 #### Example: Add field id to the lens
 
@@ -103,7 +89,7 @@ l_1 = Lens.add l_0 "y" s_0 -- Lens ["x", "y"]
 ```
 
 
-### Field subtraction
+### <span id="field-subtraction">Field subtraction</span>
 
 As explained in [Schemas and lenses](#schemas-and-lenses) the subtraction
 operation only exists for lenses. Once a schema has gained a field it can’t be
@@ -112,10 +98,9 @@ removed.
 #### Subtraction of a field from a lens
 
 The subtraction of a field, [`Lens.subtract`](#lens-subtract-function) is the
-result of appending a new [lens](#lens) definition without one of the [field
-id](#field-id)s defined in the previous version. As a consequence, any
-[projection](#projection) an existing item through the lens will not include
-the field nor the value even if the item has it.
+result of removing a [field id](#field-id) from the [lens](#lens). As a
+consequence, any [projection](#projection) an existing item through the lens
+will not include the field even if the item has a value.
 
 ```elm
 s_0 = Schema [("x", Number), ("y", Number)]
