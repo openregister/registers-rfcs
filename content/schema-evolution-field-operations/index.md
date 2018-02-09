@@ -1,7 +1,8 @@
 ---
-rfc:
+rfc: 0001
 start_date: 2017-11-17
-status: draft
+pr: openregisters/registers-rfc#5
+status: approved
 ---
 
 # Schema Evolution: Add field operation
