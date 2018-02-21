@@ -24,4 +24,15 @@ other copies of the Register (consumers, replicas, etc).
 
 ## Explanation
 
+The proposal is to introduce a new type of entry under the “user” type that
+allows listing a set of entry identifiers [TODO: entry number or entry hash?].
+This mechanism would allow invalidating discrete entries and by extension
+invalidating the full history for a key.
+
+### RSF
+
 TODO
+
+```
+append-entry	user	??	2018-02-12T10:11:12Z	sha-256:0000000000000000000000000000000000000000000000000000000000000000
+```
