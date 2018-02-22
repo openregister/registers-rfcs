@@ -83,9 +83,6 @@ and by extension invalidating the full history for a key.
 
 [TODO: Review if "chore:revoked-entries" is the right reserved key]
 
-#### Cons
-
-* This approach claims a key as reserved.
 
 #### RSF
 
@@ -96,9 +93,9 @@ append-entry	user	chore:revoked-entries	2018-02-12T10:11:12Z	sha-256:00000000000
 
 #### JSON
 
-```json
-# Entry 356
+**Entry 356:**
 
+```json
 {
   "index-entry-number": "356",
   "entry-number": "356",
@@ -106,9 +103,11 @@ append-entry	user	chore:revoked-entries	2018-02-12T10:11:12Z	sha-256:00000000000
   "item-hash": [ "sha-256:0000000000000000000000000000000000000000000000000000000000000000"],
   "entry-timestamp": "2018-02-12T10:11:12Z"
 }
+```
 
-# sha-256:0000000000000000000000000000000000000000000000000000000000000000
+**Item sha-256:0000000000000000000000000000000000000000000000000000000000000000:**
 
+```json
 {
   "id": "chore:revoked-entries",
   "entry-numbers": ["3", "234", "355"]
@@ -117,14 +116,16 @@ append-entry	user	chore:revoked-entries	2018-02-12T10:11:12Z	sha-256:00000000000
 
 #### CSV
 
-```csv
-# Entry 356
+**Entry 356:**
 
+```csv
 index-entry-number,entry-number,entry-timestamp,key,item-hash
 356,356,2018-02-12T10:11:12Z,chore:revoked-entries,"sha-256:0000000000000000000000000000000000000000000000000000000000000000"
+```
 
-# sha-256:0000000000000000000000000000000000000000000000000000000000000000
+**Item sha-256:0000000000000000000000000000000000000000000000000000000000000000:**
 
+```csv
 id,entry-numbers
 chore:revoked-entries,3;234;355;
 ```
@@ -132,6 +133,8 @@ chore:revoked-entries,3;234;355;
 #### Properties
 
 * Entries are consumed regularly (no breaking changes).
+* This approach uses reserved key in the user space. Requires avoiding clashes
+  with user data.
 * Knowledge of the reserved key is required to filter it out when collecting
   list data.
 * Records don't list reserved keys. You don't get the same information if you
@@ -140,3 +143,5 @@ chore:revoked-entries,3;234;355;
 * Revoked entries require a mechanism/documentation to explain how to apply
   them when creating the list of records.
 * Entry proofs are kept intact and invalidations are part of the tree.
+
+
