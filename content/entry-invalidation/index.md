@@ -60,7 +60,7 @@ invalidate-entry	user	2018-02-12T10:11:12Z	3;234;355
 ```
 
 
-## Alternative approach: Special entry key "entries:revoked"
+## Alternative approach: Reserved entry key + new item shape
 
 This approach keeps entries uniform but claims a key as reserved. The
 description of what entries are revoked is held in a kind of item with a
@@ -94,3 +94,15 @@ append-entry	user	entries:revoked	2018-02-12T10:11:12Z	sha-256:00000000000000000
   "entry-numbers": ["3", "234", "355"]
 }
 ```
+
+#### Properties
+
+* Entries are consumed regularly (no breaking changes).
+* Knowledge of the reserved key is required to filter it out when collecting
+  list data.
+* Records don't list reserved keys. You don't get the same information if you
+  get it from `/records` or from `/entries`. Emphasises the dichotomy between
+  porcelain and plumbing.
+* Revoked entries require a mechanism/documentation to explain how to apply
+  them when creating the list of records.
+* Entry proofs are kept intact and invalidations are part of the tree.
