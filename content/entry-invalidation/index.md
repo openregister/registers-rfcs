@@ -68,6 +68,10 @@ specific shape.
 
 [TODO: Review if "chore:revoked-entries" is the right reserved key]
 
+### Cons
+
+* This approach claims a key as reserved.
+
 #### RSF
 
 ```
