@@ -66,12 +66,12 @@ This approach keeps entries uniform but claims a key as reserved. The
 description of what entries are revoked is held in a kind of item with a
 specific shape.
 
-[TODO: Review if "entries:revoked" is the right reserved key]
+[TODO: Review if "chore:revoked-entries" is the right reserved key]
 
 #### RSF
 
 ```
-append-entry	user	entries:revoked	2018-02-12T10:11:12Z	sha-256:0000000000000000000000000000000000000000000000000000000000000000
+append-entry	user	chore:revoked-entries	2018-02-12T10:11:12Z	sha-256:0000000000000000000000000000000000000000000000000000000000000000
 ```
 
 #### JSON
@@ -82,7 +82,7 @@ append-entry	user	entries:revoked	2018-02-12T10:11:12Z	sha-256:00000000000000000
 {
   "index-entry-number": "356",
   "entry-number": "356",
-  "key": "entries:revoked",
+  "key": "chore:revoked-entries",
   "item-hash": [ "sha-256:0000000000000000000000000000000000000000000000000000000000000000"],
   "entry-timestamp": "2018-02-12T10:11:12Z"
 }
@@ -90,7 +90,7 @@ append-entry	user	entries:revoked	2018-02-12T10:11:12Z	sha-256:00000000000000000
 # sha-256:0000000000000000000000000000000000000000000000000000000000000000
 
 {
-  "id": "entries:revoked",
+  "id": "chore:revoked-entries",
   "entry-numbers": ["3", "234", "355"]
 }
 ```
