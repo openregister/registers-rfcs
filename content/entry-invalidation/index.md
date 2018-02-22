@@ -9,7 +9,8 @@ status: draft
 
 ## Summary
 
-This RFC proposes a way to invalidate an entry.
+This RFC proposes a way to invalidate an entry so previous changes considered
+mistakes can be removed from the computed list of records.
 
 
 ## Motivation
@@ -20,7 +21,9 @@ about the same thing with different identifiers because a human mistake.
 Another situation is having a change in the history of a record that is wrong.
 
 We need a way to mark entries as invalid so we can keep compatibility with
-other copies of the Register (consumers, replicas, etc).
+other copies of the Register (consumers, replicas, etc) and allow computing
+the correct(ed) list of records.
+
 
 ## Explanation
 
@@ -29,14 +32,10 @@ other copies of the Register (consumers, replicas, etc).
 
 ### Alternative A: Special entry
 
-The proposal is to introduce a new type of entry that allows listing a set of
-entry identifiers.  This mechanism would
-allow invalidating discrete entries and by extension invalidating the full
-history for a key.
-
-
-This approach defines a new type of entry. Caveat is that the shape of the
-entry is incompatible with the existing one.
+The proposal introduces a new type of entry that allows listing a set of entry
+identifiers. This mechanism would allow invalidating discrete entries and by
+extension invalidating the full history for a key. It also introduces a new
+RSF command to avoid overloading the `append-entry` command.
 
 [TODO: entry number or entry hash?]
 
@@ -67,7 +66,7 @@ invalidate-entry	user	2018-02-12T10:11:12Z	3;234;355
 
 #### Properties
 
-* New entry type without key. Breaking change diverging previous designs.
+* New entry type without key. Breaking change diverging from previous designs.
 * Records are unaffected.
 * Revoked entries require a mechanism/documentation to explain how to apply
   them when creating the list of records.
@@ -91,7 +90,7 @@ and by extension invalidating the full history for a key.
 #### RSF
 
 ```
-add-item	{"id":"chore:revoked-entries","entry-numbers":["3", "234", "355"]}
+add-item	{"id":"chore:revoked-entries","entry-numbers":["3","234","355"]}
 append-entry	user	chore:revoked-entries	2018-02-12T10:11:12Z	sha-256:0000000000000000000000000000000000000000000000000000000000000000
 ```
 
@@ -114,6 +113,20 @@ append-entry	user	chore:revoked-entries	2018-02-12T10:11:12Z	sha-256:00000000000
   "id": "chore:revoked-entries",
   "entry-numbers": ["3", "234", "355"]
 }
+```
+
+#### CSV
+
+```csv
+# Entry 356
+
+index-entry-number,entry-number,entry-timestamp,key,item-hash
+356,356,2018-02-12T10:11:12Z,chore:revoked-entries,"sha-256:0000000000000000000000000000000000000000000000000000000000000000"
+
+# sha-256:0000000000000000000000000000000000000000000000000000000000000000
+
+id,entry-numbers
+chore:revoked-entries,3;234;355;
 ```
 
 #### Properties
