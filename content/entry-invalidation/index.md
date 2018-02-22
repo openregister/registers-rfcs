@@ -24,31 +24,32 @@ other copies of the Register (consumers, replicas, etc).
 
 ## Explanation
 
-The proposal is to introduce a new type of entry under the “user” type that
-allows listing a set of entry identifiers [TODO: entry number or entry hash?].
-This mechanism would allow invalidating discrete entries and by extension
-invalidating the full history for a key.
+The proposal is to introduce a new type of entry that allows listing a set of
+entry identifiers [TODO: entry number or entry hash?].  This mechanism would
+allow invalidating discrete entries and by extension invalidating the full
+history for a key.
 
-### RSF
 
-TODO
+### Special entry
+
+This approach defines a new type of entry. Caveat is that the shape of the
+entry is incompatible with the existing one.
+
+#### RSF
 
 By entry hash
 
 ```
-append-entry	user	??	2018-02-12T10:11:12Z	sha-256:0000000000000000000000000000000000000000000000000000000000000000;sha-256:0000000000000000000000000000000000000000000000000000000000000001
 invalidate-entry	user	2018-02-12T10:11:12Z	sha-256:0000000000000000000000000000000000000000000000000000000000000000;sha-256:0000000000000000000000000000000000000000000000000000000000000001
 ```
 
 Or by entry number
 
 ```
-append-entry	user	2018-02-12T10:11:12Z	3;234;355
 invalidate-entry	user	2018-02-12T10:11:12Z	3;234;355
 ```
 
-
-### JSON
+#### JSON
 
 ```json
 {
@@ -58,4 +59,38 @@ invalidate-entry	user	2018-02-12T10:11:12Z	3;234;355
 }
 ```
 
-TODO: It could be modelled as regular entries and special items.
+
+## Alternative approach: Special entry key "entries:revoked"
+
+This approach keeps entries uniform but claims a key as reserved. The
+description of what entries are revoked is held in a kind of item with a
+specific shape.
+
+[TODO: Review if "entries:revoked" is the right reserved key]
+
+#### RSF
+
+```
+append-entry	user	entries:revoked	2018-02-12T10:11:12Z	sha-256:0000000000000000000000000000000000000000000000000000000000000000
+```
+
+#### JSON
+
+```json
+# Entry 356
+
+{
+  "index-entry-number": "356",
+  "entry-number": "356",
+  "key": "entries:revoked",
+  "item-hash": [ "sha-256:0000000000000000000000000000000000000000000000000000000000000000"],
+  "entry-timestamp": "2018-02-12T10:11:12Z"
+}
+
+# sha-256:0000000000000000000000000000000000000000000000000000000000000000
+
+{
+  "id": "entries:revoked",
+  "entry-numbers": ["3", "234", "355"]
+}
+```
