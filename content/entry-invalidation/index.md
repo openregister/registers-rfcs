@@ -24,18 +24,24 @@ other copies of the Register (consumers, replicas, etc).
 
 ## Explanation
 
+[TODO: Currently two alternatives are explored]
+
+
+### Alternative A: Special entry
+
 The proposal is to introduce a new type of entry that allows listing a set of
-entry identifiers [TODO: entry number or entry hash?].  This mechanism would
+entry identifiers.  This mechanism would
 allow invalidating discrete entries and by extension invalidating the full
 history for a key.
 
 
-### Special entry
-
 This approach defines a new type of entry. Caveat is that the shape of the
 entry is incompatible with the existing one.
 
+[TODO: entry number or entry hash?]
+
 #### RSF
+
 
 By entry hash
 
@@ -59,22 +65,33 @@ invalidate-entry	user	2018-02-12T10:11:12Z	3;234;355
 }
 ```
 
+#### Properties
 
-## Alternative approach: Reserved entry key + new item shape
+* New entry type without key. Breaking change diverging previous designs.
+* Records are unaffected.
+* Revoked entries require a mechanism/documentation to explain how to apply
+  them when creating the list of records.
+* Entry proofs are kept intact and invalidations are part of the tree.
 
-This approach keeps entries uniform but claims a key as reserved. The
-description of what entries are revoked is held in a kind of item with a
-specific shape.
+
+
+### Alternative B: Reserved entry key + new item shape
+
+The proposal introduces a reserved key and a new type of item where entry
+identifiers are listed. This mechanism allows invalidating discrete entries
+and by extension invalidating the full history for a key.
+
 
 [TODO: Review if "chore:revoked-entries" is the right reserved key]
 
-### Cons
+#### Cons
 
 * This approach claims a key as reserved.
 
 #### RSF
 
 ```
+add-item	{"id":"chore:revoked-entries","entry-numbers":["3", "234", "355"]}
 append-entry	user	chore:revoked-entries	2018-02-12T10:11:12Z	sha-256:0000000000000000000000000000000000000000000000000000000000000000
 ```
 
