@@ -16,7 +16,7 @@ mistakes can be removed from the computed list of records.
 ## Motivation
 
 Currently, the append-only nature of Registers doesn't cope well with
-mistakes. A situation that has arised more than once is getting two records
+mistakes. A situation that has arisen more than once is getting two records
 about the same thing with different identifiers because a human mistake.
 Another situation is having a change in the history of a record that is wrong.
 
@@ -34,21 +34,14 @@ the correct(ed) list of records.
 
 The proposal introduces a new type of entry that allows listing a set of entry
 identifiers. This mechanism would allow invalidating discrete entries and by
-extension invalidating the full history for a key. It also introduces a new
-RSF command to avoid overloading the `append-entry` command.
+extension invalidating the full history for a key when all entries for that
+key are flagged as invalid. It also introduces a new RSF command to avoid
+overloading the `append-entry` command.
 
-[TODO: entry number or entry hash?]
+[TODO: entry number or entry hash? Entry number is aligned with existing ways
+to refer to entries. Entry hash invalidates the entry by its content]
 
 #### RSF
-
-
-By entry hash
-
-```
-invalidate-entry	user	2018-02-12T10:11:12Z	sha-256:0000000000000000000000000000000000000000000000000000000000000000;sha-256:0000000000000000000000000000000000000000000000000000000000000001
-```
-
-Or by entry number
 
 ```
 invalidate-entry	user	2018-02-12T10:11:12Z	3;234;355
@@ -69,9 +62,8 @@ invalidate-entry	user	2018-02-12T10:11:12Z	3;234;355
 * New entry type without key. Breaking change diverging from previous designs.
 * Records are unaffected.
 * Revoked entries require a mechanism/documentation to explain how to apply
-  them when creating the list of records.
+  them when computing the list of records.
 * Entry proofs are kept intact and invalidations are part of the tree.
-
 
 
 ### Alternative B: Reserved entry key + new item shape
