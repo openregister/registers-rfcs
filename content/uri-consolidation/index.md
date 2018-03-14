@@ -1,8 +1,8 @@
 ---
-rfc:
+rfc: 0002
 start_date: 2018-03-08
-pr:
-status: draft
+pr: openregisters/registers-rfc#10
+status: approved
 ---
 
 # URI Consolidation
