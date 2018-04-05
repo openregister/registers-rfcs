@@ -130,7 +130,7 @@ append-entry	user	GB	2010-11-12T13:14:15Z	sha-256:08bef0039a4f0fb52f3a5ce4b97d79
 ```
 
 
-## Rules
+## Validation rules
 
 A RSF list of commands is expected to conform to the following rules:
 
@@ -148,6 +148,47 @@ A RSF list of commands is expected to conform to the following rules:
 * The item in the `add-item` command must always be in the canonical form.
 
 
+### Type checking
+
+Although not part of the RSF specification, it is worth mentioning that a
+Registers' implementation is expected to type check the data according to the
+computed schema.
+
+#### Metadata
+
+A metadata item must conform to the metadata schema
+
+[TODO: This needs definition].
+
+#### Data
+
+A data item must conform to the current schema derived from the previous
+system entries. A type checker is expected to verify:
+
+* It has the primary key defined.
+* Fieldnames exist in the schema.
+* Cardinality is consistent.
+* Datatype is consistent.
+
+Given the example “[All commands in use](#all-commands-example)”, a new data
+item is valid if:
+
+* It has the primary key, `country` defined.
+* It has at most one `name` field and one `official-name` field.
+* The `country` field has cardinality 1.
+* The `country` field is a String.
+* The `name` field has cardinality 1.
+* The `name` field is a String.
+* The `official-name` field has cardinality 1.
+* The `official-name` field is a String.
+
+Each datatype must be parsed according to the [datatype specification][datatype-spec].
+
+A RSF patch (set of commands) must be treated as a single transaction. If
+there is a validation error, the whole patch must be rejected and any changes
+to the state rolled back.
+
+
 ## Examples
 
 ### Simple RSF
@@ -157,7 +198,7 @@ add-item	{"country":"GB","name":"United Kingdom","official-name":"The United Kin
 append-entry	user	GB	2010-11-12T13:14:15Z	sha-256:08bef0039a4f0fb52f3a5ce4b97d7927bf159bc254b8881c45d95945617237f6
 ```
 
-### All commands in use
+### <a id="all-commands-example">All commands in use</a>
 
 ```
 assert-root-hash	sha-256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
@@ -176,3 +217,4 @@ append-entry	user	GB	2010-11-12T13:14:15Z	sha-256:08bef0039a4f0fb52f3a5ce4b97d79
 [entry-res]: https://openregister.github.io/specification/#entry-resource
 [canon-rep]: https://openregister.github.io/specification/#sha-256-item-hash
 [digital-proofs]: http://openregister.github.io/specification/#digital-proofs
+[datatype-spec]: http://openregister.github.io/specification/#datatypes
