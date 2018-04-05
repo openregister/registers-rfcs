@@ -198,6 +198,15 @@ add-item	{"country":"GB","name":"United Kingdom","official-name":"The United Kin
 append-entry	user	GB	2010-11-12T13:14:15Z	sha-256:08bef0039a4f0fb52f3a5ce4b97d7927bf159bc254b8881c45d95945617237f6
 ```
 
+### Multiple items
+
+```
+add-item	{"local-authority-eng":"LND","local-authority-type":"NMD","name":"London"}
+add-item	{"local-authority-eng":"LEI","local-authority-type":"NMD","name":"Leicester"}
+add-item	{"local-authority-eng":"CHE","local-authority-type":"NMD","name":"Cheshire"}
+append-entry	user	NMD	2016-04-05T13:23:05Z	sha-256:490636974f8087e4518d222eba08851dd3e2b85095f2b1427ff6ecd3fa482435;sha-256:8b748c574bf975990e47e69df040b47126d2a0a3895b31dce73988fba2ba27d8;sha-256:eb3ee00e6149cd734a7fa7e1f01a5fbf5fb50e1b38a065fd97d6ad3017750351
+```
+
 ### <a id="all-commands-example">All commands in use</a>
 
 ```
