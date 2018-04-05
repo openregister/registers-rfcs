@@ -74,10 +74,6 @@ TZ               = "Z"    ; timezone
 The current media type is `application/uk-gov-rsf`. It should change to
 `application/vnd.rsf` to align with [RFC6838](https://tools.ietf.org/html/rfc6838).
 
-TODO: Or `text/vnd.rsf+tab-separated-values` if we want to express RSF is a
-type on top of TSV. In any case `vnd` needs to be prefixed because the media
-type is not registered with IANA.
-
 
 ## Commands
 
