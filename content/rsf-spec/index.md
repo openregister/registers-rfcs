@@ -16,8 +16,13 @@ required.
 The Register Serialisation Format, from now on RSF, is an event log describing
 the evolution of the Register data and metadata.
 
+## Motivation
 
-## RSF Grammar
+TODO
+
+## Explanation
+
+### RSF Grammar
 
 RSF is a positional line-based textual format separated by tabs. Each
 line defines a command to apply to a Register state to obtain the next state.
@@ -69,21 +74,31 @@ TSEP             = ":"    ; time separator
 TZ               = "Z"    ; timezone
 ```
 
-## Media type
+### Media type
 
 The current media type is `application/uk-gov-rsf`. It should change to
 `application/vnd.rsf` to align with [RFC6838](https://tools.ietf.org/html/rfc6838).
 
+### REST API
 
-## Commands
+TODO
 
-### <a id="assert-root-hash-command">`assert-root-hash` command</a>
+The current implementation uses `GET /download-rsf`. The main issue with that
+is that diverges from the rest of the API where serialisation is expressed
+either via suffix or via media type. The problem with using the same approach,
+say `GET /register.rsf` is that we are not providing the same information when
+querying `GET /register.json`.
+
+
+### Commands
+
+#### <a id="assert-root-hash-command">`assert-root-hash` command</a>
 
 Asserts that the provided root hash is the same as the one computed from the
 current entry log as defined in the [Digital Proofs][digital-proofs]
 specification.
 
-#### Arguments
+##### Arguments
 
 1. The `hash` of the root tree.
 
@@ -93,12 +108,12 @@ For example, the empty root hash:
 assert-root-hash	sha-256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 ```
 
-### <a id="add-item-command">`add-item` command</a>
+#### <a id="add-item-command">`add-item` command</a>
 
 Adds a new [Item resource][item-res] to the register. It will require an
 [`append-entry` command](#append-entry-command) to make it visible to users.
 
-#### Arguments
+##### Arguments
 
 1. The [canonical representation][canon-rep] of the item.
 
@@ -108,11 +123,11 @@ For exeample:
 add-item	{"country":"GB","name":"United Kingdom","official-name":"The United Kingdom of Great Britain and Northern Ireland"}
 ```
 
-### <a id="append-entry-command">`append-entry` command</a>
+#### <a id="append-entry-command">`append-entry` command</a>
 
 Appends a new [Entry resource][entry-res] to the register.
 
-#### Arguments
+##### Arguments
 
 1. The `type` of the entry determines if the entry belongs to the data log
    (`user`) or to the metadata log (`system`).
@@ -130,7 +145,7 @@ append-entry	user	GB	2010-11-12T13:14:15Z	sha-256:08bef0039a4f0fb52f3a5ce4b97d79
 ```
 
 
-## Validation rules
+### Validation rules
 
 A RSF list of commands is expected to conform to the following rules:
 
@@ -148,19 +163,19 @@ A RSF list of commands is expected to conform to the following rules:
 * The item in the `add-item` command must always be in the canonical form.
 
 
-### Type checking
+#### Type checking
 
 Although not part of the RSF specification, it is worth mentioning that a
 Registers' implementation is expected to type check the data according to the
 computed schema.
 
-#### Metadata
+##### Metadata
 
 A metadata item must conform to the metadata schema
 
 [TODO: This needs definition].
 
-#### Data
+##### Data
 
 A data item must conform to the current schema derived from the previous
 system entries. A type checker is expected to verify:
@@ -189,16 +204,16 @@ there is a validation error, the whole patch must be rejected and any changes
 to the state rolled back.
 
 
-## Examples
+### Examples
 
-### Simple RSF
+#### Simple RSF
 
 ```
 add-item	{"country":"GB","name":"United Kingdom","official-name":"The United Kingdom of Great Britain and Northern Ireland"}
 append-entry	user	GB	2010-11-12T13:14:15Z	sha-256:08bef0039a4f0fb52f3a5ce4b97d7927bf159bc254b8881c45d95945617237f6
 ```
 
-### Multiple items
+#### Multiple items
 
 ```
 add-item	{"local-authority-eng":"LND","local-authority-type":"NMD","name":"London"}
@@ -207,7 +222,7 @@ add-item	{"local-authority-eng":"CHE","local-authority-type":"NMD","name":"Chesh
 append-entry	user	NMD	2016-04-05T13:23:05Z	sha-256:490636974f8087e4518d222eba08851dd3e2b85095f2b1427ff6ecd3fa482435;sha-256:8b748c574bf975990e47e69df040b47126d2a0a3895b31dce73988fba2ba27d8;sha-256:eb3ee00e6149cd734a7fa7e1f01a5fbf5fb50e1b38a065fd97d6ad3017750351
 ```
 
-### <a id="all-commands-example">All commands in use</a>
+#### <a id="all-commands-example">All commands in use</a>
 
 ```
 assert-root-hash	sha-256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
