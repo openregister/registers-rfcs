@@ -89,6 +89,25 @@ either via suffix or via media type. The problem with using the same approach,
 say `GET /register.rsf` is that we are not providing the same information when
 querying `GET /register.json`.
 
+What is a good name for a resource that represents the whole raw database?
+
+```
+# RSF
+
+GET /{db resource}.rsf
+
+GET /{db resource}
+Accept: application/vnd.rsf
+
+
+# JSON Lines — Hypothetical
+
+GET /{db resource}.jsonl
+
+GET /{db resource}.jsonl
+Accept: application/x-ndjson
+```
+
 
 ### Commands
 
