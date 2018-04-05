@@ -100,7 +100,7 @@ specification.
 
 ##### Arguments
 
-1. The `hash` of the root tree.
+1. The `hash` of the root of the tree.
 
 For example, the empty root hash:
 
