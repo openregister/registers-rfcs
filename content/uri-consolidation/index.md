@@ -37,7 +37,10 @@ Endpoint mappings:
 * From `/record/{field-value}` to `/records/{field-value}`.
 * From `/record/{field-value}/entries` to `/records/{field-value}/entries`.
 * From `/entry/{entry-number}` to `/entries/{entry-number}`.
+* From `/entry/{entry-number}/proofs` to `/entries/{entry-number}/proofs`.
 * From `/item/{item-hash}` to `/items/{item-hash}`.
+* From `/proof/entry/{entry-number}/{total-entries}/{proof-identifier}` to
+`/proof/entries/{entry-number}/{total-entries}/{proof-identifier}`.
 
 Note that we have not yet implemented `/items`, but it is in the pipeline.
 
