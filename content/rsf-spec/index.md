@@ -129,8 +129,9 @@ assert-root-hash	sha-256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991
 
 #### <a id="add-item-command">`add-item` command</a>
 
-Adds a new [Item resource][item-res] to the register. It will require an
-[`append-entry` command](#append-entry-command) to make it visible to users.
+Adds a new [Item resource][item-res] to the register. There must be at least
+an [`append-entry` command](#append-entry-command) referencing the item's hash
+later on to make the RSF patch [valid](#validation-rules).
 
 ##### Arguments
 
@@ -164,7 +165,7 @@ append-entry	user	GB	2010-11-12T13:14:15Z	sha-256:08bef0039a4f0fb52f3a5ce4b97d79
 ```
 
 
-### Validation rules
+### <a href="validation-rules">Validation rules</a>
 
 A RSF list of commands is expected to conform to the following rules:
 
