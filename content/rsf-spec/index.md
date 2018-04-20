@@ -185,7 +185,7 @@ A RSF list of commands is expected to conform to the following rules:
 #### Type checking
 
 Although not part of the RSF specification, it is worth mentioning that a
-Registers' implementation is expected to type check the data according to the
+Registers implementation is expected to type check the data according to the
 computed schema.
 
 ##### Metadata
