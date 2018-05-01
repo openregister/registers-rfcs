@@ -1,8 +1,8 @@
 ---
-rfc:
+rfc: 0003
 start_date: 2018-04-26
-pr:
-status: draft
+pr: openregisters/registers-rfc#16
+status: approved
 ---
 
 # Entry timestamp meaning
