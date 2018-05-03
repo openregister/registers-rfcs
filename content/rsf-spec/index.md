@@ -47,7 +47,7 @@ add-item         = %s"add-item" HTAB CANONREP
 
 append-entry     = %s"append-entry" HTAB type HTAB key HTAB timestamp HTAB hash-list
 type             = %s"user" / %s"system"
-key              = alphanum / %x2D / %x5F
+key              = alphanum *(alphanum / %x2D / %x5F)
 hash-list        = hash *(list-separator hash)
 hash             = %s"sha-256:" 64(HEXDIG) ; sha-256
 list-separator   = ";" ; hash list separator
