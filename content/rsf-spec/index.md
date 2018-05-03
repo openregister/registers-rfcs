@@ -187,11 +187,11 @@ A RSF list of commands is expected to conform to the following rules:
   number found in the register.
 * An [`append-entry` command](#append-entry-command) must always appear after
   the [`add-item` command](#add-item-command) that introduces the item is
-  referencing.
+  referencing *unless* the item already exists in the register.
 * It is illegal to have orphan items. An `add-item` must have at least one
   `append-entry` referencing to the item.
 * It is illegal to have broken references. An `append-entry` must reference an
-  item previously introduced by an `add-item` command.
+  existing item or an item previously introduced by an `add-item` command.
 * It is illegal to have two identical consecutive `append-entry` commands.
 * The item in the `add-item` command must always be in the canonical form.
 
