@@ -120,8 +120,11 @@ It is also possible to get a register patch in RSF:
 #### <a id="assert-root-hash-command">`assert-root-hash` command</a>
 
 Asserts that the provided root hash is the same as the one computed from the
-current entry log as defined in the [Digital Proofs][digital-proofs]
+current user entry log as defined in the [Digital Proofs][digital-proofs]
 specification.
+
+Note that the system entries are not part of the root hash computation and are
+not asserted in any way.
 
 ##### Arguments
 
@@ -176,9 +179,12 @@ append-entry	user	GB	2010-11-12T13:14:15Z	sha-256:08bef0039a4f0fb52f3a5ce4b97d79
 A RSF list of commands is expected to conform to the following rules:
 
 * [Commands](#commands) are executed in order of appearance, top to bottom.
-* Entries are numbered in sequence in order of appearance starting with 1 if
-  the register is empty, otherwise incrementing on the latest entry number
+* User entries are numbered in sequence in order of appearance starting with 1
+  if the register is empty, otherwise incrementing on the latest entry number
   found in the register.
+* System entries are numbered in sequence in order of appearance starting with
+  1 if the register is empty, otherwise incrementing on the latest entry
+  number found in the register.
 * An [`append-entry` command](#append-entry-command) must always appear after
   the [`add-item` command](#add-item-command) that introduces the item is
   referencing.
