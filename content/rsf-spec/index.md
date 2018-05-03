@@ -108,6 +108,12 @@ GET /{db resource}.jsonl
 Accept: application/x-ndjson
 ```
 
+It is also possible to get a register patch in RSF:
+
+* `GET /download-rsf/{n}`. Returns the RSF patch from the entry number `n`
+  (non inclusive) to the most recent entry number.
+* `GET /download-rsf/{n}/{m}`. Returns the RSF patch from the entry number `n`
+  (non inclusive) to the entry number `m` (inclusive).
 
 ### Commands
 
