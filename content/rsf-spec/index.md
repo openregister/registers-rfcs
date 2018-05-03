@@ -1,7 +1,7 @@
 ---
 rfc:
 start_date: 2018-04-04
-pr:
+pr: openregisters/registers-rfc#12
 status: draft
 ---
 
@@ -46,16 +46,16 @@ assert-root-hash = %s"assert-root-hash" HTAB hash
 add-item         = %s"add-item" HTAB CANONREP
 
 append-entry     = %s"append-entry" HTAB type HTAB key HTAB timestamp HTAB hash-list
-type             = "user" / "system"
+type             = %s"user" / %s"system"
 key              = alphanum / %x2D / %x5F
 hash-list        = hash *(list-separator hash)
-hash             = "sha-256:" 64(HEXDIG) ; sha-256
+hash             = %s"sha-256:" 64(HEXDIG) ; sha-256
 list-separator   = ";" ; hash list separator
 
 alphanum         = ALPHA / DIGIT
 
 ;                timestamp
-timestamp        = date "T" time
+timestamp        = date %s"T" time
 date             = century year DSEP month DSEP day ; date YYYY-MM-DD
 time             = hour TSEP minute TSEP second TZ ; time HH:MM:SSZ
 
@@ -71,7 +71,7 @@ hour             = 2DIGIT ; 00-24
 minute           = 2DIGIT ; 00-59
 second           = 2DIGIT ; 00-58, 00-59, 00-60 based on leap-second rules
 TSEP             = ":"    ; time separator
-TZ               = "Z"    ; timezone
+TZ               = %s"Z"    ; timezone
 ```
 
 ### Media type
