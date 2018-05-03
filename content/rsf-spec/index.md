@@ -192,6 +192,7 @@ A RSF list of commands is expected to conform to the following rules:
   `append-entry` referencing to the item.
 * It is illegal to have broken references. An `append-entry` must reference an
   item previously introduced by an `add-item` command.
+* It is illegal to have two identical consecutive `append-entry` commands.
 * The item in the `add-item` command must always be in the canonical form.
 
 
