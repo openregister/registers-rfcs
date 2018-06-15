@@ -52,8 +52,11 @@ implemented for the data log.
 
 ### Delta
 
+---
 TODO: Ensure fields express everything they need to express (e.g. datatype,
-cardinality)
+cardinality, description). Ideally description should be handled aside from
+datatype and cardinality so we could hash-check the pair never changes.
+---
 
 The `delta` property keeps the data to apply on top of the previous metadata
 state. A delta allows mutliple bits of data so it can describe an update for
@@ -64,7 +67,7 @@ a0 : Delta
 a0 =
   [ ("id", "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
   , ("name", "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5")
-  , ("field:country", "473287f8298dba7163a897908958f7c0eae733e25d2e027992ea2edc9bed2fa8")
+  , ("field:country", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
   ]
 ```
 
@@ -83,7 +86,7 @@ m1 =
 
 m1 == a0 == [ ("id", "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
             , ("name", "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5")
-            , ("field:country", "473287f8298dba7163a897908958f7c0eae733e25d2e027992ea2edc9bed2fa8")
+            , ("field:country", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
             ]
 ```
 
@@ -92,7 +95,7 @@ A second delta `a1` such as
 ```elm
 a1 : Delta
 a1 =
-  [ ("field:name", "473287f8298dba7163a897908958f7c0eae733e25d2e027992ea2edc9bed2fa8") ]
+  [ ("field:name", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b") ]
 ```
 
 is applied to a previous state `m1` as:
@@ -104,9 +107,18 @@ m2 =
 
 m2 == [ ("id", "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
       , ("name", "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5")
-      , ("field:country", "473287f8298dba7163a897908958f7c0eae733e25d2e027992ea2edc9bed2fa8")
-      , ("field:name", "473287f8298dba7163a897908958f7c0eae733e25d2e027992ea2edc9bed2fa8")
+      , ("field:country", d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
+      , ("field:name", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
       ]
 ```
 
+**Blobs**, similarly to Items, can be treated as a dictionary (hash map):
 
+```elm
+blobs: Dict String Blob
+blobs =
+  Dict [ ("aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7", Blob.String "country")
+       , ("701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5", Blob.String "Country")
+       , (d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b", Blob.FieldType {cardinality: "1", datatype: "string"})
+       ]
+```
