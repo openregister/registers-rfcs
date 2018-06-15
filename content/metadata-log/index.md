@@ -49,11 +49,26 @@ The `target` property is crucial to keep a connection between the two logs. It
 uses the data entry hash to prevent unexpected replacements of data that could
 occur in the data log.
 
+The first changeset can optionally not provide a `target` and it's assumed it
+will apply to the data log from the first entry. This allows recording the
+first changeset when the data log doesn't exist which is expected because you
+need a schema to validate the data is valid.
+
+---
+
+TODO: Is is acceptable to have multiple changesets with no `target` if none of
+the previous changesets have one? It would allow incrementally defining the
+schema before the first data entry gets recorded.
+
+---
+
 ### Parent
 
 The `parent` property works in a similar way as in Git's commits. The
 intention is to explore a linked list structure instead of the ordered list
 implemented for the data log.
+
+The first changeset is expected to have no parent.
 
 ### Delta
 
@@ -147,3 +162,38 @@ TODO: Blobs that are strings, to be valid JSON need to have quotes. Do we want
 this?
 
 ---
+
+### Changeset example
+
+This code exemplifies two changesets where the first is the parent of the
+second.
+
+```elm
+type Changeset =
+  { timestamp: DateTime
+  , target: Option Hash
+  , parent: Option Hash
+  , delta: Delta
+  }
+
+chs0 =
+  { timestamp: DateTime "2018-06-14T15:51:00Z"
+  , target: Nothing
+  , parent: Nothing
+  , delta: [ ("id", "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
+           , ("name", "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5")
+           , ("field:country", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
+           ]
+  }
+
+getHash chs0 -- Hash "adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b2cc0d6"
+
+chs1 =
+  { timestamp: DateTime "2018-06-14T15:59:00Z"
+  , target: Some "0000000000000000000000000000000000000000000000000000000000000000"
+  , parent: Some "adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b2cc0d6"
+  , delta: [ ("field:name", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b") ]
+  }
+
+getHash chs1 -- Hash "62bf2dae9312a9080f945caaf035fd512c8d5ddd1189cfb7ae04489e564ca379"
+```
