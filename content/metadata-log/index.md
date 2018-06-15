@@ -29,14 +29,19 @@ coordination with the original data log.
 
 A metadata log is a list of **changesets** where each changeset has:
 
+* `timestamp`: The datetime where this changeset was created.
 * `target`: A reference to the data log entry hash it applies.
 * `parent`: A reference to the previous changeset hash.
 * `delta`: A list of pairs (`key`, `blob`) describing the **delta** of changes where:
   * `key`: Name of the piece of data (e.g. "name", "description",
       "field:country").
   * `blob`: A reference to the relevant **blob** hash.
-* `timestamp`: The datetime where this changeset was created.
 
+### Timestamp
+
+The `timestamp` property describes when the changeset was recorded. Similarly
+to Entry timestamps, they don't define the order of the metadata log, they are
+mostly informative.
 
 ### Target
 
@@ -53,9 +58,11 @@ implemented for the data log.
 ### Delta
 
 ---
+
 TODO: Ensure fields express everything they need to express (e.g. datatype,
 cardinality, description). Ideally description should be handled aside from
 datatype and cardinality so we could hash-check the pair never changes.
+
 ---
 
 The `delta` property keeps the data to apply on top of the previous metadata
@@ -135,6 +142,8 @@ blobs =
 Blob hashing uses the same algorithm as the Items.
 
 ---
+
 TODO: Blobs that are strings, to be valid JSON need to have quotes. Do we want
 this?
+
 ---
