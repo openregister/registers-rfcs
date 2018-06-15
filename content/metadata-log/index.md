@@ -84,6 +84,7 @@ m1 : State
 m1 =
   apply a0 m0
 
+-- TODO: What if each pair has an Action (e.g. Add foo or Remove bar?)
 m1 == a0 == [ ("id", "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
             , ("name", "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5")
             , ("field:country", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
@@ -107,7 +108,7 @@ m2 =
 
 m2 == [ ("id", "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
       , ("name", "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5")
-      , ("field:country", d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
+      , ("field:country", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
       , ("field:name", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
       ]
 ```
@@ -115,10 +116,25 @@ m2 == [ ("id", "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7
 **Blobs**, similarly to Items, can be treated as a dictionary (hash map):
 
 ```elm
-blobs: Dict String Blob
+type Cardinality
+  = One
+  | Many
+
+type Blob
+  = BlobString String
+  | BlobFieldType {cardinality: Cardinality, datatype: Datatype}
+
+blobs: Dict Key Blob
 blobs =
-  Dict [ ("aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7", Blob.String "country")
-       , ("701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5", Blob.String "Country")
-       , (d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b", Blob.FieldType {cardinality: "1", datatype: "string"})
+  Dict [ ("aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7", BlobString "country")
+       , ("701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5", BlobString "Country")
+       , ("d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b", BlobFieldType {cardinality: One, datatype: DatatypeString})
        ]
 ```
+
+Blob hashing uses the same algorithm as the Items.
+
+---
+TODO: Blobs that are strings, to be valid JSON need to have quotes. Do we want
+this?
+---
