@@ -24,6 +24,9 @@ This RFC aims to keep backwards compatibility by creating a new metadata log
 to encode metadata changes with references to the data log to keep
 coordination with the original data log.
 
+### Use cases (potential)
+
+TODO
 
 ## Explanation
 
@@ -32,10 +35,29 @@ A metadata log is a list of **changesets** where each changeset has:
 * `timestamp`: The datetime where this changeset was created.
 * `target`: A reference to the data log entry hash it applies.
 * `parent`: A reference to the previous changeset hash.
-* `delta`: A list of pairs (`key`, `blob`) describing the **delta** of changes where:
+* `delta`: An ordered set of pairs (`key`, `hash`) describing the **delta** of changes where:
   * `key`: Name of the piece of data (e.g. "name", "description",
       "field:country").
-  * `blob`: A reference to the relevant **blob** hash.
+  * `hash`: A reference to the relevant **blob** hash.
+
+```
+type Delta =
+  OrdSet (Key, Hash)
+
+type Changeset =
+  { timestamp: Timestamp
+  , target: Maybe Hash
+  , parent: Maybe Hash
+  , delta: Delta
+  }
+
+
+-- TODO: Remove if it's too prescriptive and irrelevant
+-- An object stored in the store
+type Object
+  = Blb Blob -- TODO: Define Blob
+  | Chs Changeset
+```
 
 ### Timestamp
 
@@ -75,11 +97,29 @@ have a single parent hash informed.
 
 ### Delta
 
----
+The `delta` property has the data to apply on top of the previous metadata
+state. A delta allows mutliple bits of data so it can describe an update for
+multiple unique keys at the same time. For example:
 
-TODO: Ensure fields express everything they need to express (e.g. datatype,
-cardinality, description). A change needs to allow for changing label and
-description but not id, datatype or cardinality.
+```elm
+type Delta =
+  OrdSet Key Hash
+
+a0 : Delta
+a0 =
+  [ ("custodian", "72bb44793c2e42872ebc892f411dab0f700049231a6a4169f87a20580d7cd516")
+  , ("field:country", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
+  , ("id", "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
+  , ("name", "dcd1d5223f73b3a965c07e3ff5dbee3eedcfedb806686a05b9b3868a2c3d6d50")
+  ]
+```
+
+Note a delta is an ordered set ordered by key.
+
+
+TODO: This attempt to describe the resulting metadata state shows that the very
+first changeset requires at least `id`, `custodian` and the field acting as
+the identifier for data items (i.e. primary key).
 
 ```elm
 type PrimitiveType
@@ -101,54 +141,38 @@ type Field =
   , description: Maybe String
   }
 
-f1: Field
-f1 =
-  { id: "name"
-  , datatype: One StringType
-  , label: Just "Name"
-  , description: Just "The name of the country"
-  }
-
--- Returns the result of hashing the relevant parts of the identity: id, datatype
-Field.identity: Field -> Hash
-
--- Returns the Field Blob hash
-Field.hash: Field -> Hash
+type State
+  = Empty
+  | State { id: String
+          , name: Maybe String
+          , description: Maybe String
+          , custodian: String
+          , fields: Set Field
+          , primaryKey: FieldId -- TODO: Any other better name to describe the Id?
+          }
 ```
 
----
-
-The `delta` property keeps the data to apply on top of the previous metadata
-state. A delta allows mutliple bits of data so it can describe an update for
-multiple keys at the same time. For example:
-
-```elm
-a0 : Delta
-a0 =
-  [ ("id", "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
-  , ("name", "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5")
-  , ("field:country", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
-  ]
-```
-
-This delta applied to an empty state yields the same state:
+TODO (relevant?): This delta applied to an empty state yields the
+derreferenced objects:
 
 ```elm
 apply : Delta -> State -> State
 
 m0 : State
 m0 =
-  []
+  Empty
 
 m1 : State
 m1 =
   apply a0 m0
 
--- TODO: What if each pair has an Action (e.g. Add foo or Remove bar?)
-m1 == a0 == [ ("id", "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
-            , ("name", "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5")
-            , ("field:country", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
-            ]
+m1 == State { id: "country"
+            , name: Just "Country"
+            , description: Nothing
+            , custodian: "Foreign & Commonwealth Office"
+            , fields: Set [ { id: "country", datatype: One StringType } ]
+            , primaryKey: "country"
+            }
 ```
 
 A second delta `a1` such as
@@ -166,40 +190,43 @@ m2 : State
 m2 =
   apply a1 m1
 
-m2 == [ ("id", "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
-      , ("name", "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5")
-      , ("field:country", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
-      , ("field:name", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
-      ]
+m2 == State { id: "country"
+            , name: Just "Country"
+            , description: Nothing
+            , custodian: "Foreign & Commonwealth Office"
+              fields: Set [ Field { id: "name"
+                                  , datatype: One StringType
+                                  , label: Just "Name"
+                                  , description: Just "the name of the country"
+                                  }
+                          , Field { id: "name"
+                                  , datatype: One StringType
+                                  , label: Just "Name"
+                                  , description: Just "the name of the country"
+                                  }
+                          ]
+            , primaryKey: "country"
+            }
+
 ```
 
 **Blobs**, similarly to Items, can be treated as a dictionary (hash map):
 
 ```elm
-type Cardinality
-  = One
-  | Many
+-- TODO: Probably better to stick to the current definition and use a
+-- JSON-like string
+type Blob = String
 
-type Blob
-  = BlobString String
-  | BlobFieldType {cardinality: Cardinality, datatype: Datatype}
-
-blobs: Dict Key Blob
+blobs: Dict Hash Blob
 blobs =
-  Dict [ ("aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7", BlobString "country")
-       , ("701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5", BlobString "Country")
-       , ("d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b", BlobFieldType {cardinality: One, datatype: DatatypeString})
+  Dict [ ("aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7", "\"country\"")
+       , ("701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5", "\"Country\"")
+       , ("d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b", "{\"cardinality\":\"1\",\"datatype\":\"string\"}")
        ]
 ```
 
 Blob hashing uses the same algorithm as the Items.
 
----
-
-TODO: Blobs that are strings, to be valid JSON need to have quotes. Do we want
-this?
-
----
 
 ### Changeset example
 
@@ -209,8 +236,8 @@ second.
 ```elm
 type Changeset =
   { timestamp: DateTime
-  , target: Option Hash
-  , parent: Option Hash
+  , target: Maybe Hash
+  , parent: Maybe Hash
   , delta: Delta
   }
 
@@ -228,8 +255,8 @@ getHash chs0 -- Hash "adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b
 
 chs1 =
   { timestamp: DateTime "2018-06-14T15:59:00Z"
-  , target: Some "0000000000000000000000000000000000000000000000000000000000000000"
-  , parent: Some "adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b2cc0d6"
+  , target: Just "0000000000000000000000000000000000000000000000000000000000000000"
+  , parent: Just "adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b2cc0d6"
   , delta: [ ("field:name", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b") ]
   }
 
