@@ -70,15 +70,51 @@ The `parent` property works in a similar way as in Git's commits. The
 intention is to explore a linked list structure instead of the ordered list
 implemented for the data log.
 
-The first changeset is expected to have no parent.
+The first changeset is expected to have no parent. Any other changeset will
+have a single parent hash informed.
 
 ### Delta
 
 ---
 
 TODO: Ensure fields express everything they need to express (e.g. datatype,
-cardinality, description). Ideally description should be handled aside from
-datatype and cardinality so we could hash-check the pair never changes.
+cardinality, description). A change needs to allow for changing label and
+description but not id, datatype or cardinality.
+
+```elm
+type PrimitiveType
+  = StringType
+  | IntegerType
+  | CurieType
+  | ... -- Not all listed for brevity
+
+-- Cardinality renamed here because it's combined with the data type itself as
+-- they are two parts of the same thing.
+type Datatype
+  = One PrimitiveType
+  | Many PrimitiveType
+
+type Field =
+  { id: String
+  , datatype: Datatype
+  , label: Maybe String
+  , description: Maybe String
+  }
+
+f1: Field
+f1 =
+  { id: "name"
+  , datatype: One StringType
+  , label: Just "Name"
+  , description: Just "The name of the country"
+  }
+
+-- Returns the result of hashing the relevant parts of the identity: id, datatype
+Field.identity: Field -> Hash
+
+-- Returns the Field Blob hash
+Field.hash: Field -> Hash
+```
 
 ---
 
