@@ -39,28 +39,30 @@ A metadata log is a list of **changesets** where each changeset has:
 
 ### Timestamp
 
-The `timestamp` property describes when the changeset was recorded. Similarly
-to Entry timestamps, they don't define the order of the metadata log, they are
-mostly informative.
+The `timestamp` property describes when the changeset was recorded. They don't
+define the order of the metadata log.
 
 ### Target
 
-The `target` property is crucial to keep a connection between the two logs. It
-uses the data entry hash to prevent unexpected replacements of data that could
-occur in the data log.
+The `target` property is crucial to keep a connection between the data log and
+the metadata log. It uses the data entry hash to prevent unexpected
+replacements of data that could occur in the data log.
 
-The first changeset can optionally not provide a `target` and it's assumed it
-will apply to the data log from the first entry. This allows recording the
-first changeset when the data log doesn't exist which is expected because you
-need a schema to validate the data is valid.
+The first changeset expects `target` to be nil given that the first item in
+the data log must conform to a defined schema. Optionally, new changesets can
+be recorded on top of the first one without `target`. Once there is a
+changeset with a explicit `target` no more nil `target` properties are
+allowed.
 
----
+Rough algorithm given a new changeset:
 
-TODO: Is is acceptable to have multiple changesets with no `target` if none of
-the previous changesets have one? It would allow incrementally defining the
-schema before the first data entry gets recorded.
-
----
+1. If it's the first changeset:
+  * Succeed if `target` is nil.
+  * Fail otherwise.
+2. If it's not the first changeset:
+  * If `target` is nil:
+    * Succeed if parent's `target` is nil.
+    * Fail otherwise.
 
 ### Parent
 
