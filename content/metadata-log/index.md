@@ -40,7 +40,7 @@ A metadata log is a list of **changesets** where each changeset has:
       "field:country").
   * `hash`: A reference to the relevant **blob** hash.
 
-```
+```elm
 type Delta =
   OrdSet (Key, Hash)
 
@@ -187,15 +187,15 @@ m2 == State { id: "country"
             , name: Just "Country"
             , description: Nothing
             , custodian: "Foreign & Commonwealth Office"
-              fields: Set [ Field { id: "name"
+              fields: Set [ Field { id: "country"
                                   , datatype: One StringType
-                                  , label: Just "Name"
-                                  , description: Just "the name of the country"
+                                  , label: Just "Country"
+                                  , description: Just "The country's 2-letter ISO 3166-2 alpha2 code."
                                   }
                           , Field { id: "name"
                                   , datatype: One StringType
                                   , label: Just "Name"
-                                  , description: Just "the name of the country"
+                                  , description: Just "The name of the country."
                                   }
                           ]
             , primaryKey: "country"
@@ -255,3 +255,44 @@ chs1 =
 
 getHash chs1 -- Hash "62bf2dae9312a9080f945caaf035fd512c8d5ddd1189cfb7ae04489e564ca379"
 ```
+
+## High-level (porcelain) API
+
+There are new endpoints that surface the computed state for the metadata log.
+
+### Get the computed schema
+
+* Endpoint: `GET /schema/`
+* Parameters:
+  * `entry-number`: A valid data log entry number (range: 1..[end of log]).
+
+TODO: The schema will not be provided as CSV unless we find it essential and
+we find a reasonable way to flatten the structure.
+
+Response example in JSON:
+
+```json
+{
+  "id": "country",
+  "name": "Country",
+  "custodian": "Foreign & Commonwealth Office",
+  "fields": [
+    {
+      "id": "country",
+      "datatype": "string",
+      "label": "Name",
+      "description": "The country's 2-letter ISO 3166-2 alpha2 code.",
+    }, {
+      "id": "name",
+      "datatype": "string",
+      "label": "Name",
+      "description": "The name of the country."
+    }
+  ],
+  "primary-key": "country"
+}
+```
+
+## Low-level (plumbing) API
+
+The following endpoints are low level
