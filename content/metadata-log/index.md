@@ -50,13 +50,6 @@ type Changeset =
   , parent: Maybe Hash
   , delta: Delta
   }
-
-
--- TODO: Remove if it's too prescriptive and irrelevant
--- An object stored in the store
-type Object
-  = Blb Blob -- TODO: Define Blob
-  | Chs Changeset
 ```
 
 ### Timestamp
