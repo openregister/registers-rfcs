@@ -100,10 +100,10 @@ type Delta =
 
 a0 : Delta
 a0 =
-  [ ("custodian", "72bb44793c2e42872ebc892f411dab0f700049231a6a4169f87a20580d7cd516")
-  , ("field:country", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
-  , ("id", "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
-  , ("name", "dcd1d5223f73b3a965c07e3ff5dbee3eedcfedb806686a05b9b3868a2c3d6d50")
+  [ ("custodian", Hash "72bb44793c2e42872ebc892f411dab0f700049231a6a4169f87a20580d7cd516")
+  , ("field:country", Hash "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
+  , ("id", Hash "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
+  , ("name", Hash "dcd1d5223f73b3a965c07e3ff5dbee3eedcfedb806686a05b9b3868a2c3d6d50")
   ]
 ```
 
@@ -173,7 +173,7 @@ A second delta `a1` such as
 ```elm
 a1 : Delta
 a1 =
-  [ ("field:name", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b") ]
+  [ ("field:name", Hash "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b") ]
 ```
 
 is applied to a previous state `m1` as:
@@ -212,9 +212,9 @@ type Blob = String
 
 blobs: Dict Hash Blob
 blobs =
-  Dict [ ("aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7", "\"country\"")
-       , ("701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5", "\"Country\"")
-       , ("d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b", "{\"cardinality\":\"1\",\"datatype\":\"string\"}")
+  Dict [ (Hash "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7", "\"country\"")
+       , (Hash "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5", "\"Country\"")
+       , (Hash "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b", "{\"cardinality\":\"1\",\"datatype\":\"string\"}")
        ]
 ```
 
@@ -238,9 +238,9 @@ chs0 =
   { timestamp: DateTime "2018-06-14T15:51:00Z"
   , target: Nothing
   , parent: Nothing
-  , delta: [ ("id", "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
-           , ("name", "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5")
-           , ("field:country", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
+  , delta: [ ("id", Hash "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7")
+           , ("name", Hash "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5")
+           , ("field:country", Hash "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b")
            ]
   }
 
@@ -248,9 +248,9 @@ getHash chs0 -- Hash "adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b
 
 chs1 =
   { timestamp: DateTime "2018-06-14T15:59:00Z"
-  , target: Just "0000000000000000000000000000000000000000000000000000000000000000"
-  , parent: Just "adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b2cc0d6"
-  , delta: [ ("field:name", "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b") ]
+  , target: Just (Hash "0000000000000000000000000000000000000000000000000000000000000000")
+  , parent: Just (Hash "adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b2cc0d6")
+  , delta: [ ("field:name", Hash "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b") ]
   }
 
 getHash chs1 -- Hash "62bf2dae9312a9080f945caaf035fd512c8d5ddd1189cfb7ae04489e564ca379"
