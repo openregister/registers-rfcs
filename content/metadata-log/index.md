@@ -277,9 +277,16 @@ There are new endpoints that surface the computed state for the metadata log.
 TODO: The schema will not be provided as CSV unless we find it essential and
 we find a reasonable way to flatten the structure.
 
-Response example in JSON:
+```http
+GET /schema/ HTTP/2
+Host: country.register.gov.uk
+Accept: application/json
+```
 
-```json
+```http
+HTTP/2 200
+Content-Type: application/json
+
 {
   "id": "country",
   "name": "Country",
@@ -310,8 +317,21 @@ The following endpoints are low level
 ## Get the list of changesets
 
 * Endpoint: `GET /meta/changesets/`
+* Parameters:
+  * `page-index` (Optional): Collection page number. Defaults to 1.
+  * `page-size` (Optional): Collection page size. Defaults to 100.
 
-```json
+```http
+GET /meta/changesets/ HTTP/2
+Host: country.register.gov.uk
+Accept: application/json
+```
+
+```http
+HTTP/2 200
+Content-Type: application/json
+Link: <?page-index=2&page-size=2>; rel="next"
+
 [
   {
     "id": "adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b2cc0d6",
@@ -329,4 +349,29 @@ The following endpoints are low level
     "delta": { "field:name": "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b" }
   }
 ]
+```
+
+## Get a single changeset
+
+* Endpoint: `GET /meta/changesets/{id}`
+
+```http
+GET /meta/changesets/adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b2cc0d6 HTTP/2
+Host: country.register.gov.uk
+Accept: application/json
+```
+
+```http
+HTTP/2 200
+Content-Type: application/json
+
+{
+  "id": "adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b2cc0d6",
+  "timestamp": "2018-06-14T15:51:00Z",
+  "delta": {
+    "id": "aff64e4fd520bd185cb01adab98d2d20060f621c62d5cad5204712cfa2294ef7",
+    "name": "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5",
+    "field:country": "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b"
+  }
+}
 ```
