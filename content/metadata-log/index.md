@@ -354,6 +354,8 @@ Link: <?page-index=2&page-size=2>; rel="next"
 ## Get a single changeset
 
 * Endpoint: `GET /meta/changesets/{id}`
+* Parameters:
+  * `id` (Required): The changeset hash.
 
 ```http
 GET /meta/changesets/adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b2cc0d6 HTTP/2
@@ -375,3 +377,65 @@ Content-Type: application/json
   }
 }
 ```
+
+## Get the list of blobs
+
+* Endpoint: `GET /meta/blobs/`
+* Parameters:
+  * `page-index` (Optional): Collection page number. Defaults to 1.
+  * `page-size` (Optional): Collection page size. Defaults to 100.
+
+
+```http
+GET /meta/blobs/ HTTP/2
+Host: country.register.gov.uk
+Accept: application/json
+```
+
+```http
+HTTP/2 200
+Content-Type: application/json
+Link: <?page-index=2&page-size=2>; rel="next"
+
+[
+  {
+    "id": "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5",
+    "value": "\"country\""
+  }, {
+    "id": "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b",
+    "value": "{\"cardinality\":\"1\",\"datatype\":\"string\"}"
+  }
+]
+```
+
+---
+
+TODO: Blobs return their value stringified. What are the implications of
+returning the value in JSON instead?
+
+---
+
+## Get a blob by id
+
+* Endpoint: `GET /meta/blobs/{id}`
+* Parameters:
+  * `id` (Required): The Blob hash.
+
+
+```http
+GET /meta/blobs/701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5 HTTP/2
+Host: country.register.gov.uk
+Accept: application/json
+```
+
+```http
+HTTP/2 200
+Content-Type: application/json
+
+{
+  "id": "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5",
+  "value": "\"country\""
+}
+```
+
+
