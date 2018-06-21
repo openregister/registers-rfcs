@@ -148,6 +148,7 @@ type State
           , name: Maybe String
           , description: Maybe String
           , custodian: String
+          , hashAlgorithm: HashAlg, -- TODO: Can we introduce this bit of information at the register level?
           , fields: Set Field
           , primaryKey: FieldId -- TODO: Any other better name to describe the Id?
           }
@@ -412,6 +413,33 @@ Link: <?page-index=2&page-size=2>; rel="next"
 
 TODO: Blobs return their value stringified. What are the implications of
 returning the value in JSON instead?
+
+Should blobs be annotated by type?
+
+```
+type Blob
+  = Value String -- Leaf like label, description or custodian
+  | Field String
+  | ... ?
+```
+
+```http
+HTTP/2 200
+Content-Type: application/json
+Link: <?page-index=2&page-size=2>; rel="next"
+
+[
+  {
+    "id": "701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5",
+    "type": "value",
+    "value": "country"
+  }, {
+    "id": "d22869a1fd9fc929c2a07f476dd579af97691b2d0f4d231e8300e20c0326dd6b",
+    "type": "field",
+    "value": {"cardinality": "1", "datatype": "string"}
+  }
+]
+```
 
 ---
 
