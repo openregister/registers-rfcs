@@ -280,11 +280,13 @@ Response example in JSON:
     {
       "id": "country",
       "datatype": "string",
+      "cardinality": "1",
       "label": "Name",
       "description": "The country's 2-letter ISO 3166-2 alpha2 code.",
     }, {
       "id": "name",
       "datatype": "string",
+      "cardinality": "1",
       "label": "Name",
       "description": "The name of the country."
     }
