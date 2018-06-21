@@ -69,6 +69,14 @@ be recorded on top of the first one without `target`. Once there is a
 changeset with a explicit `target` no more nil `target` properties are
 allowed.
 
+---
+
+TODO: Alternative to nil, use the empty hash:
+
+    "target": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+
+---
+
 Rough algorithm given a new changeset:
 
 1. If it's the first changeset:
