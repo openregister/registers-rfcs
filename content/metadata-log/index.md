@@ -20,7 +20,7 @@ metadata. The reference implementation has a few bits of metadata (e.g.
 description, name, fields) but the specification offers no way to consume
 them.
 
-This RFC aims to keep backwards compatibility by creating a new metadata log
+This RFC aims to keep backwards compatibility by creating a new log
 to encode metadata changes with references to the data log to keep
 coordination with the original data log.
 
@@ -54,12 +54,10 @@ type Changeset =
 type MetaLog =
   Dict Hash Changeset
 
--- TODO: Relevant?
-first : MetaLog -> Changeset
-
-current : MetaLog -> Changeset
-
 previous : Changeset -> MetaLog -> Changeset
+
+-- Computes a schema from the given changeset
+schema : Changeset -> MetaLog -> Schema
 ```
 
 ### Timestamp
