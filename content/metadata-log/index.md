@@ -50,6 +50,16 @@ type Changeset =
   , parent: Maybe Hash
   , delta: Delta
   }
+
+type MetaLog =
+  Dict Hash Changeset
+
+-- TODO: Relevant?
+first : MetaLog -> Changeset
+
+current : MetaLog -> Changeset
+
+previous : Changeset -> MetaLog -> Changeset
 ```
 
 ### Timestamp
