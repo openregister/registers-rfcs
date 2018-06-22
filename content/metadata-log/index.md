@@ -279,13 +279,13 @@ TODO: The schema will not be provided as CSV unless we find it essential and
 we find a reasonable way to flatten the structure.
 
 ```http
-GET /schema/ HTTP/2
+GET /schema/ HTTP/1.1
 Host: country.register.gov.uk
 Accept: application/json
 ```
 
 ```http
-HTTP/2 200
+HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
@@ -323,13 +323,13 @@ The following endpoints are low level
   * `page-size` (Optional): Collection page size. Defaults to 100.
 
 ```http
-GET /meta/changesets/ HTTP/2
+GET /meta/changesets/ HTTP/1.1
 Host: country.register.gov.uk
 Accept: application/json
 ```
 
 ```http
-HTTP/2 200
+HTTP/1.1 200 OK
 Content-Type: application/json
 Link: <?page-index=2&page-size=2>; rel="next"
 
@@ -359,13 +359,13 @@ Link: <?page-index=2&page-size=2>; rel="next"
   * `id` (Required): The changeset hash.
 
 ```http
-GET /meta/changesets/adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b2cc0d6 HTTP/2
+GET /meta/changesets/adcd501c027ad83fbdf4c3423630da89b2c013b9e8641ec0c2679ed33b2cc0d6 HTTP/1.1
 Host: country.register.gov.uk
 Accept: application/json
 ```
 
 ```http
-HTTP/2 200
+HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
@@ -388,13 +388,13 @@ Content-Type: application/json
 
 
 ```http
-GET /meta/blobs/ HTTP/2
+GET /meta/blobs/ HTTP/1.1
 Host: country.register.gov.uk
 Accept: application/json
 ```
 
 ```http
-HTTP/2 200
+HTTP/1.1 200 OK
 Content-Type: application/json
 Link: <?page-index=2&page-size=2>; rel="next"
 
@@ -424,7 +424,7 @@ type Blob
 ```
 
 ```http
-HTTP/2 200
+HTTP/1.1 200 OK
 Content-Type: application/json
 Link: <?page-index=2&page-size=2>; rel="next"
 
@@ -451,13 +451,13 @@ Link: <?page-index=2&page-size=2>; rel="next"
 
 
 ```http
-GET /meta/blobs/701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5 HTTP/2
+GET /meta/blobs/701d021d08c54579f23343581e45b65ffb1150b2c99f94352fdac4b7036dbbd5 HTTP/1.1
 Host: country.register.gov.uk
 Accept: application/json
 ```
 
 ```http
-HTTP/2 200
+HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
