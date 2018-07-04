@@ -375,7 +375,7 @@ Content-Type: application/json
 
 The following endpoints are low level
 
-## Get the list of changesets
+### Get the list of changesets
 
 * Endpoint: `GET /meta/changesets/`
 * Parameters:
@@ -412,7 +412,7 @@ Link: <?page-index=2&page-size=2>; rel="next"
 ]
 ```
 
-## Get a single changeset
+### Get a single changeset
 
 * Endpoint: `GET /meta/changesets/{id}`
 * Parameters:
@@ -439,7 +439,7 @@ Content-Type: application/json
 }
 ```
 
-## Get the list of blobs
+### Get the list of blobs
 
 * Endpoint: `GET /meta/blobs/`
 * Parameters:
@@ -503,7 +503,7 @@ Link: <?page-index=2&page-size=2>; rel="next"
 
 ---
 
-## Get a blob by id
+### Get a blob by id
 
 * Endpoint: `GET /meta/blobs/{id}`
 * Parameters:
@@ -526,4 +526,9 @@ Content-Type: application/json
 }
 ```
 
+## Benefits
 
+* It's not a breaking change.
+  * Users consuming from `/records/` are not affected.
+  * Users consuming from `/entries/` are not affected.
+* Users interested in data changes don't need to care about metadata changes.
