@@ -69,6 +69,15 @@ The issue arises when a new record is validated against an old schema if and
 only if the new record has fields informed that were defined in newer versions
 of the schema.
 
+#### As a user I want to get a schema version
+
+1. `GET /schema/{hash}`
+
+---
+
+TODO: Is this needed? It's not well defined use case.
+
+---
 
 
 ## Explanation
