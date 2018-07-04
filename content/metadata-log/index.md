@@ -54,6 +54,22 @@ sufficient.
 
 ---
 
+#### As a user I want to validate a record against the latest (correct) schema.
+
+1. `GET /schema/`
+2. (time passes)
+3. `GET /records/foo`
+4. `GET /schema/`
+5. validate
+
+Essentially this means that either we provide a way to know if the schema is
+the latest or we require to always fetch a new version.
+
+The issue arises when a new record is validated against an old schema if and
+only if the new record has fields informed that were defined in newer versions
+of the schema.
+
+
 
 ## Explanation
 
