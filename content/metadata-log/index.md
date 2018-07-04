@@ -26,7 +26,34 @@ coordination with the original data log.
 
 ### Use cases (potential)
 
-TODO
+#### As a user I want to get a records and validate them against the schema.
+
+1. `GET /records/foo`
+2. `GET /schema/`
+3. validate
+
+#### As a user I want to validate a record I got _some_ time ago and validate it against the schema.
+
+1. `GET /records/foo`
+2. (time passes)
+3. `GET /schema/`
+4. validate
+
+
+#### As a user I want to get a record at an arbitrary log size and validate it against the schema.
+
+1. `GET /records/foo?size=10`
+2. `GET /schema/?size=10`
+3. validate
+
+---
+
+TODO: Is the last use case artificial? Also, if schemas only allow adding
+fields and all fields are optional, the schema at size HEAD should be
+sufficient.
+
+---
+
 
 ## Explanation
 
