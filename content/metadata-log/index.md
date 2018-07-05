@@ -15,10 +15,9 @@ affecting the current data log.
 
 ## Motivation
 
-Registers started as pure data, and slowly they added different bits of
-metadata. The reference implementation has a few bits of metadata (e.g.
-description, name, fields) but the specification offers no way to consume
-them.
+Registers started as pure data, and slowly added different bits of metadata.
+The reference implementation has a few bits of metadata (e.g.  description,
+name, fields) but the specification offers no way to consume them.
 
 This RFC aims to keep backwards compatibility by creating a new log
 to encode metadata changes with references to the data log to keep
@@ -76,6 +75,12 @@ of the schema.
 ---
 
 TODO: Is this needed? It's not well defined use case.
+
+---
+
+---
+
+TODO: What are the use cases for metadata outside of field information?
 
 ---
 
@@ -335,8 +340,14 @@ There are new endpoints that surface the computed state for the metadata log.
 * Parameters:
   * `entry-number` (Optional): A valid data log entry number (range: 1..[end of log]).
 
+---
+
 TODO: The schema will not be provided as CSV unless we find it essential and
 we find a reasonable way to flatten the structure.
+
+Also our datatypes are not compatible with CSVW, XSD or JSON-Schema.
+
+---
 
 ```http
 GET /schema/ HTTP/1.1
@@ -379,8 +390,8 @@ The following endpoints are low level
 
 * Endpoint: `GET /meta/changesets/`
 * Parameters:
-  * `page-index` (Optional): Collection page number. Defaults to 1.
-  * `page-size` (Optional): Collection page size. Defaults to 100.
+  * `cursor` (Optional): Opaque pointer to the next collection page.
+  * `size` (Optional): Collection size. Defaults to 100.
 
 ```http
 GET /meta/changesets/ HTTP/1.1
@@ -443,12 +454,44 @@ Content-Type: application/json
 
 * Endpoint: `GET /meta/blobs/`
 * Parameters:
-  * `page-index` (Optional): Collection page number. Defaults to 1.
-  * `page-size` (Optional): Collection page size. Defaults to 100.
+  * `cursor` (Optional): Opaque pointer to the next collection page.
+  * `size` (Optional): Collection size. Defaults to 100.
+
+---
+
+TODO: This pagination diverges from the ones offered by the data log. This is
+to explore the idea of paginating naturally unordered collections in an
+ordered way. In SQL this could take the form of a keyset pagination such as:
+
+```sql
+CREATE TABLE (
+  n SERIAL,
+  value VARCHAR(255) NOT NULL CHECK (value <> ''),
+  id bytea PRIMARY KEY
+);
+
+CREATE INDEX n_idx ON blob USING btree (n);
+
+SELECT id, value
+FROM blob
+WHERE n > ?cursor
+ORDER BY n ASC
+LIMIT 2;
+```
+
+Size could be fixed if we don't need to provide this flexibility. Cursor could
+be more obscure so users don't attempt to change the querystring by hand.
+
+The value of using something like keyset pagination is to ensure pages are
+always the same because the set has a forced order that doesn't depend on the
+hash but an incremental number (could be a timestamp) so effectively only
+half-empty pages would change when adding a new element.
+
+---
 
 
 ```http
-GET /meta/blobs/ HTTP/1.1
+GET /meta/blobs/?size=2 HTTP/1.1
 Host: country.register.gov.uk
 Accept: application/json
 ```
@@ -456,7 +499,7 @@ Accept: application/json
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
-Link: <?page-index=2&page-size=2>; rel="next"
+Link: <?cursor=2&size=2>; rel="next"
 
 [
   {
