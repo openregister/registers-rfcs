@@ -459,6 +459,9 @@ Content-Type: application/json
 
 ---
 
+TODO: Parameters are informative and implementation dependant in the current
+specification.
+
 TODO: This pagination diverges from the ones offered by the data log. This is
 to explore the idea of paginating naturally unordered collections in an
 ordered way. In SQL this could take the form of a keyset pagination such as:
