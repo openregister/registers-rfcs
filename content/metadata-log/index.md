@@ -24,7 +24,7 @@ This RFC aims to keep backwards compatibility by creating a new log
 to encode metadata changes with references to the data log to keep
 coordination with the original data log.
 
-### Use cases (potential)
+### Use cases
 
 #### As a user I want to get a records and validate them against the schema.
 
