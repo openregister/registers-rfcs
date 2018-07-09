@@ -203,7 +203,7 @@ type Datatype
 type Field =
   { id: String
   , datatype: Datatype
-  , label: Maybe String
+  , name: Maybe String
   , description: Maybe String
   }
 
@@ -243,7 +243,7 @@ m1 == State { id: "country"
             , fields: Set [] -- Empty set because only the Primary key is defined
             , primaryKey: Field { id: "country"
                                 , datatype: One StringType
-                                , label: Just "Country"
+                                , name: Just "Country"
                                 , description: Just "The country's 2-letter ISO 3166-2 alpha2 code."
                                 }
             }
@@ -270,13 +270,13 @@ m2 == State { id: "country"
             , custodian: "Foreign & Commonwealth Office"
               fields: Set [ Field { id: "name"
                                   , datatype: One StringType
-                                  , label: Just "Name"
+                                  , name: Just "Name"
                                   , description: Just "The name of the country."
                                   }
                           ]
             , primaryKey: Field { id: "country"
                                 , datatype: One StringType
-                                , label: Just "Country"
+                                , name: Just "Country"
                                 , description: Just "The country's 2-letter ISO 3166-2 alpha2 code."
                                 }
             }
@@ -372,13 +372,13 @@ Content-Type: application/json
       "id": "country",
       "datatype": "string",
       "cardinality": "1",
-      "label": "Name",
+      "name": "Name",
       "description": "The country's 2-letter ISO 3166-2 alpha2 code.",
     }, {
       "id": "name",
       "datatype": "string",
       "cardinality": "1",
-      "label": "Name",
+      "name": "Name",
       "description": "The name of the country."
     }
   ],
@@ -528,7 +528,7 @@ Should blobs be annotated by type?
 
 ```
 type Blob
-  = Value String -- Leaf like label, description or custodian
+  = Value String -- Leaf like name, description or custodian
   | Field String
   | ... ?
 ```
