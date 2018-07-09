@@ -90,7 +90,7 @@ TODO: What are the use cases for metadata outside of field information?
 A metadata log is a list of **changesets** where each changeset has:
 
 * `timestamp`: The datetime where this changeset was created.
-* `target`: A reference to the data log entry hash it applies.
+* `target`: A reference to the data log entry hash it applies to.
 * `parent`: A reference to the previous changeset hash.
 * `delta`: An ordered set of pairs (`key`, `hash`) describing the **delta** of changes where:
   * `key`: Name of the piece of data (e.g. "name", "description",
@@ -134,14 +134,6 @@ be recorded on top of the first one without `target`. Once there is a
 changeset with a explicit `target` no more nil `target` properties are
 allowed.
 
----
-
-TODO: Alternative to nil, use the empty hash:
-
-    "target": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-
----
-
 Rough algorithm given a new changeset:
 
 1. If it's the first changeset:
@@ -151,6 +143,14 @@ Rough algorithm given a new changeset:
   * If `target` is nil:
     * Succeed if parent's `target` is nil.
     * Fail otherwise.
+
+---
+
+TODO: In a situation (arguably common) where metadata is defined once and not
+changed at all, the `target` would be nil for a long time (forever?). Does
+it matter?
+
+---
 
 ### Parent
 
@@ -207,16 +207,19 @@ type Field =
   , description: Maybe String
   }
 
+type Snapshot
+  { id: String
+  , name: Maybe String
+  , description: Maybe String
+  , custodian: String
+  , hashAlgorithm: HashAlg, -- TODO: Can we introduce this bit of information at the register level?
+  , fields: Set Field
+  , primaryKey: Field
+  }
+
 type State
   = Empty
-  | State { id: String
-          , name: Maybe String
-          , description: Maybe String
-          , custodian: String
-          , hashAlgorithm: HashAlg, -- TODO: Can we introduce this bit of information at the register level?
-          , fields: Set Field
-          , primaryKey: FieldId -- TODO: Any other better name to describe the Id?
-          }
+  | State Snapshot
 ```
 
 TODO (relevant?): This delta applied to an empty state yields the
@@ -237,8 +240,12 @@ m1 == State { id: "country"
             , name: Just "Country"
             , description: Nothing
             , custodian: "Foreign & Commonwealth Office"
-            , fields: Set [ { id: "country", datatype: One StringType } ]
-            , primaryKey: "country"
+            , fields: Set [] -- Empty set because only the Primary key is defined
+            , primaryKey: Field { id: "country"
+                                , datatype: One StringType
+                                , label: Just "Country"
+                                , description: Just "The country's 2-letter ISO 3166-2 alpha2 code."
+                                }
             }
 ```
 
@@ -261,18 +268,17 @@ m2 == State { id: "country"
             , name: Just "Country"
             , description: Nothing
             , custodian: "Foreign & Commonwealth Office"
-              fields: Set [ Field { id: "country"
-                                  , datatype: One StringType
-                                  , label: Just "Country"
-                                  , description: Just "The country's 2-letter ISO 3166-2 alpha2 code."
-                                  }
-                          , Field { id: "name"
+              fields: Set [ Field { id: "name"
                                   , datatype: One StringType
                                   , label: Just "Name"
                                   , description: Just "The name of the country."
                                   }
                           ]
-            , primaryKey: "country"
+            , primaryKey: Field { id: "country"
+                                , datatype: One StringType
+                                , label: Just "Country"
+                                , description: Just "The country's 2-letter ISO 3166-2 alpha2 code."
+                                }
             }
 
 ```
@@ -280,8 +286,6 @@ m2 == State { id: "country"
 **Blobs**, similarly to Items, can be treated as a dictionary (hash map):
 
 ```elm
--- TODO: Probably better to stick to the current definition and use a
--- JSON-like string
 type Blob = String
 
 blobs: Dict Hash Blob
@@ -467,16 +471,16 @@ to explore the idea of paginating naturally unordered collections in an
 ordered way. In SQL this could take the form of a keyset pagination such as:
 
 ```sql
-CREATE TABLE (
+CREATE TABLE blobs (
   n SERIAL,
   value VARCHAR(255) NOT NULL CHECK (value <> ''),
   id bytea PRIMARY KEY
 );
 
-CREATE INDEX n_idx ON blob USING btree (n);
+CREATE INDEX n_idx ON blobs USING btree (n);
 
 SELECT id, value
-FROM blob
+FROM blobs
 WHERE n > ?cursor
 ORDER BY n ASC
 LIMIT 2;
