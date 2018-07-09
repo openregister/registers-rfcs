@@ -406,7 +406,7 @@ Accept: application/json
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
-Link: <?page-index=2&page-size=2>; rel="next"
+Link: </meta/changesets/?cursor=2&size=2>; rel="next"
 
 [
   {
@@ -506,7 +506,7 @@ Accept: application/json
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
-Link: <?cursor=2&size=2>; rel="next"
+Link: </meta/blobs/?cursor=2&size=2>; rel="next"
 
 [
   {
@@ -536,7 +536,7 @@ type Blob
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
-Link: <?page-index=2&page-size=2>; rel="next"
+Link: </meta/blobs/?cursor=2&page-size=2>; rel="next"
 
 [
   {
