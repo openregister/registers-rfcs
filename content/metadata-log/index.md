@@ -19,9 +19,9 @@ Registers started as pure data, and slowly added different bits of metadata.
 The reference implementation has a few bits of metadata (e.g.  description,
 name, fields) but the specification offers no way to consume them.
 
-This RFC aims to keep backwards compatibility by creating a new log
-to encode metadata changes with references to the data log to keep
-coordination with the original data log.
+This RFC proposes a new log to encode metadata changes which has references to
+the original data log. An important side effect of this approach is that it
+maintains backwards compatibility.
 
 ### Use cases
 
