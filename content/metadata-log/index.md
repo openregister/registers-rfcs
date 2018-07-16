@@ -15,23 +15,22 @@ affecting the current data log.
 
 ## Motivation
 
-Registers started as pure data, and slowly added different bits of metadata.
-The reference implementation has a few bits of metadata (e.g.  description,
-name, fields) but the specification offers no way to consume them.
+Registers started as pure data, but have evolved as metadata has been added.
+The reference implementation has some metadata (e.g.  description, name,
+fields) but the specification offers no way to consume them.
 
 This RFC proposes a new log to encode metadata changes which has references to
-the original data log. An important side effect of this approach is that it
-maintains backwards compatibility.
+the original data log, in order to maintain backwards compatibility.
 
 ### Use cases
 
-#### As a user I want to get a records and validate them against the schema.
+#### As a user I want to get a records and validate them against the schema
 
 1. `GET /records/foo`
 2. `GET /schema/`
 3. validate
 
-#### As a user I want to validate a record I got _some_ time ago and validate it against the schema.
+#### As a user I want to validate a record I got some time ago and validate it against the schema.
 
 1. `GET /records/foo`
 2. (time passes)
@@ -39,7 +38,7 @@ maintains backwards compatibility.
 4. validate
 
 
-#### As a user I want to get a record at an arbitrary log size and validate it against the schema.
+#### As a user I want to get a record at an arbitrary log size and validate it against the schema
 
 1. `GET /records/foo?size=10`
 2. `GET /schema/?size=10`
@@ -53,7 +52,7 @@ sufficient.
 
 ---
 
-#### As a user I want to validate a record against the latest (correct) schema.
+#### As a user I want to validate a record against the latest (correct) schema
 
 1. `GET /schema/`
 2. (time passes)
@@ -62,7 +61,7 @@ sufficient.
 5. validate
 
 Essentially this means that either we provide a way to know if the schema is
-the latest or we require to always fetch a new version.
+the latest version, or we make it a requirement to always fetch a new version.
 
 The issue arises when a new record is validated against an old schema if and
 only if the new record has fields informed that were defined in newer versions
@@ -119,8 +118,8 @@ schema : Changeset -> MetaLog -> Schema
 
 ### Timestamp
 
-The `timestamp` property describes when the changeset was recorded. They don't
-define the order of the metadata log.
+The `timestamp` property describes when the changeset was recorded. It does
+not define the order of the metadata log.
 
 ### Target
 
@@ -131,10 +130,10 @@ replacements of data that could occur in the data log.
 The first changeset expects `target` to be nil given that the first item in
 the data log must conform to a defined schema. Optionally, new changesets can
 be recorded on top of the first one without `target`. Once there is a
-changeset with a explicit `target` no more nil `target` properties are
+changeset with a explicit `target`, no more nil `target` properties are
 allowed.
 
-Rough algorithm given a new changeset:
+A rough algorithm given a new changeset is as follows:
 
 1. If it's the first changeset:
   * Succeed if `target` is nil.
@@ -154,7 +153,7 @@ it matter?
 
 ### Parent
 
-The `parent` property works in a similar way as in Git's commits. The
+The `parent` property works in a similar way as in Git commits. The
 intention is to explore a linked list structure instead of the ordered list
 implemented for the data log.
 
@@ -164,7 +163,7 @@ have a single parent hash informed.
 ### Delta
 
 The `delta` property has the data to apply on top of the previous metadata
-state. A delta allows mutliple bits of data so it can describe an update for
+state. A delta allows multiple bits of data so it can describe an update for
 multiple unique keys at the same time. For example:
 
 ```elm
@@ -180,7 +179,7 @@ a0 =
   ]
 ```
 
-Note a delta is an ordered set ordered by key.
+Note that a delta is an ordered set ordered by key.
 
 
 TODO: This attempt to describe the resulting metadata state shows that the very
@@ -249,7 +248,7 @@ m1 == State { id: "country"
             }
 ```
 
-A second delta `a1` such as
+A second delta `a1`, such as:
 
 ```elm
 a1 : Delta
@@ -388,7 +387,7 @@ Content-Type: application/json
 
 ## Low-level (plumbing) API
 
-The following endpoints are low level
+The following endpoints are low-level.
 
 ### Get the list of changesets
 
