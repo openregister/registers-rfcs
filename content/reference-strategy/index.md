@@ -13,9 +13,10 @@ This RFC proposes CURIEs as the only way to reference between records and from a
 to a register (set of records). It can be seen as the natural consequence of
 [RFC 0002: URI Consolidation](https://github.com/openregister/registers-rfcs/blob/master/content/uri-consolidation/index.md).
 
-Note that other types of references (e.g. subset of records) are out of the
-scope. See the discussion [Group References](https://github.com/openregister/registers-rfcs/issues/4)
-for more on this.
+Note that other types of references (e.g. subset of records) are out of scope.
+See the discussion [Group
+References](https://github.com/openregister/registers-rfcs/issues/4) for more
+on this.
 
 ## Motivation
 
@@ -28,33 +29,43 @@ register (including itself). You have to deduce by the name of the field that
 the values are in fact identifiers (primary keys) for records in a Register of
 the same name. To get the URI of the referenced resource you have to:
 
-1. Given a fieldname `country`
+1. Given a field with name `x`, where the record for `x` in the Field register
+   has the `register` field populated with value `country`
 1. And a value `GB`
 1. Compose a register subdomain: `country.register.gov.uk`
 1. Compose a record set URI: `https://country.register.gov.uk/records/`
 1. Concatenate the URI with the value: `https://country.register.gov.uk/records/GB`
 
-There is a special case here where a foreign key refers to a register register
-record. Then the meaning of the relation is “everything in the register
-described by the linked record”.
+There is a case that can be seen as a special case where a foreign key refers
+to a register register record. Then the meaning of the relation can be seen as
+“everything in the register described by the linked record”.
 
 1. Given a fieldname `register`
 1. And a value `country`
-1. Compose a register subdomain: `country.register.gov.uk`
-1. Compose a set URI: `https://country.register.gov.uk/records/`
+1. Compose a register subdomain: `register.register.gov.uk`
+1. Compose a record set URI: `https://register.register.gov.uk/records/`
+1. Concatenate the URI with the value: `https://register.register.gov.uk/records/country`
+1. Derive the record set URI: `https://country.register.gov.uk/records/`
+
+The last step is not specified anywhere so it is an internal convention more
+than anything a regular user might know. It is defined here in order to mirror
+the capabilities for CURIEs.
 
 #### Benefits
 
 * Potentially familiar to people familiar with the Relational Data Model.
 * Hints a single type of thing for any value in the field.
 
-#### Problems
+#### Limitations
 
-* To know a field contains a foreign key, you need to look up the register field
-in the field definition. If it is informed, the datatype is not “string” but
-“key”.
+* To know a field contains a foreign key, you need to look up the `register`
+  field in the field register. If it is informed, the original field is a “key”
+  of type defined in the `datatype` field.
 * Only able to reference one register per field.
-* Linking a full set of records is a special case.
+* You need a field for each register linked to even if they have the same type
+  of relationship with the record (e.g. owned by, managed by).
+* Linking a full set of records is not possible. Although there is a
+  convention that could be standarised previous section.
 
 
 ### CURIE
@@ -89,7 +100,7 @@ step:
 * It's built on a existing open standard. Technically it is a note and not a
   recommendation but it is used in many standards, including RDF.
 
-#### Problems
+#### Limitations
 
 * A consumer has to know the assumptions that lead from a prefix to a URI. And
   know it's not the standard way to work with CURIEs.
@@ -132,10 +143,24 @@ With this context, the following expansions are expected to be true:
 Note that currently the context is managed partially by the Register register.
 Further work is expected to evolve it to match this definition of context.
 
-## Conclusion
+## Naming conventions
 
-This RFC accepts CURIE as the only mechanism for linking between register from
-now on given they offer the flexibility required by registers.
+Foreign keys have been using the same field definition as the primary key in
+the targeted register. This means that a sigle entry in the field register
+defines a field used in one register as the primary key and in another
+register as a foreign key. This convention derives from another one where the
+primary key field is always the same as the register identifier. E.g. the
+register with id `country`, has a field `country` that acts as the primary key
+for that register. Another register with a field `country` will use the field
+as a foreign key.
 
-Existing registers that use foreign keys will be maintained to avoid
-disruption in the registers ecosystem.
+With CURIEs this assumption weakens. A future RFC will define the new
+convention for naming fields of type CURIE although this will be _informative_
+not _normative_. The current thinking is to move away from using names and
+start using relationships. For example, given a register with a link to the
+organisation that manages the resource, it would use something like
+`managed-by` instead of `manager` or `organisation`.
+
+A future RFC will formalise the way to explicitly identify the primary key for
+a register so the convention of using the register identifier will be
+addressed there.
