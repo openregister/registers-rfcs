@@ -1,8 +1,8 @@
 ---
-rfc:
+rfc: 0004
 start_date: 2018-07-26
-pr:
-status: draft
+pr: openregisters/registers-rfc#21
+status: approved
 ---
 
 # Format reduction
@@ -17,7 +17,7 @@ which format to implement, will use it by default.
 ## Motivation
 
 The Registers data model and its REST API are still subject to change. The
-amount of formats which we currently account for unnecessarily complicate the
+amount of formats which we currently account for unnecessarily complicates the
 implementation. For example, we want to evolve who the schema fits into the
 data model and how the schema is exposed to the user.
 
