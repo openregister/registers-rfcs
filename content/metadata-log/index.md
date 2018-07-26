@@ -63,9 +63,9 @@ sufficient.
 Essentially this means that either we provide a way to know if the schema is
 the latest version, or we make it a requirement to always fetch a new version.
 
-The issue arises when a new record is validated against an old schema if and
-only if the new record has fields informed that were defined in newer versions
-of the schema.
+One potential issue arises when a new record is validated against an old
+schema. This happens if (and only if) the new record has fields which were
+defined in newer versions of the schema.
 
 #### As a user I want to get a schema version
 
