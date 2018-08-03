@@ -69,9 +69,10 @@ as the [objecthash](https://github.com/benlaurie/objecthash) algorithm.
 Tags:
 
 * `i`: Integer.
-* `s`: String (e.g. `ID` type).
+* `u`: Unicode String (e.g. `ID` type).
 * `t`: Timestamp.
-* `h`: Hash.
+* `r`: Raw Hash.
+* `l`: List.
 
 ```elm
 hashValue : Alg -> Value -> Tag -> Hash
@@ -92,7 +93,7 @@ timestampHash = hashValue Sha256 "2016-04-05T13:23:05Z" Timestamp
 timestampHash == "f22ecc4464f22c8fee624769189665a0afd7ef10a2775a000082c47cbd9f6419"
 
 keyHash = hashValue Sha256 "GB" String
-keyHash == "c8fe89332c2aa2b92234bd43d0fb327c64fdbdce4ea527f51f78111543dd5341"
+keyHash == "fff7021c7df4426be0f9a3c83f236eb6f85d159e624b010d65e6dde267889c21"
 ```
 
 The item is a special case:
@@ -104,14 +105,48 @@ The item is a special case:
 The algorithm:
 
 1. Foreach value, strip out the prefix.
-2. Concatenate all hashes in strict order.
-3. Hash the result.
+2. Tag and Hash each value.
+3. Concatenate all hashes in the same order.
+4. Tag and hash the result.
 
 ```elm
 hashValueList : Alg -> List Value -> Tag -> Hash
 
 itemHash  = hashValueList Sha256 ["sha-256:6b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"] Hash
-itemHash == "2d44caa5719d20a648aff8de575aa4832209ae0274f66edf5c33bcebceefef9a"
+itemHash == "06e387ba89400ba977e5a146c567cf7337db4de1dd41498366e30d6e77b5b2bc"
+```
+
+These are the steps for the example above:
+
+1. Strip out prefixes:
+
+```elm
+rawList = stripPrefix ["sha-256:6b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"]
+rawList == ["6b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"]
+```
+
+2. Tag and hash:
+
+```elm
+hashedList =
+  map hashListValue ["6b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"]
+  where
+    hashListValue e = hashValue Sha256 e Hash
+
+hashedList == ["63825e4c6f3dd8b229be451b17f57a4e431eb92ae62f9581c9bd268558c27177"]
+```
+3. Concatenate:
+
+```elm
+concatHash = concatAll ["63825e4c6f3dd8b229be451b17f57a4e431eb92ae62f9581c9bd268558c27177"]
+concatHash == "63825e4c6f3dd8b229be451b17f57a4e431eb92ae62f9581c9bd268558c27177"
+```
+
+4. Tag and hash:
+
+```
+itemHash = hashValue Sha256 concatHash List
+itemHash == "06e387ba89400ba977e5a146c567cf7337db4de1dd41498366e30d6e77b5b2bc"
 ```
 
 ### order the resulting hashes
