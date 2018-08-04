@@ -5,7 +5,7 @@ pr:
 status: draft
 ---
 
-# Item hash revisit
+# Item hash with redaction
 
 ## Summary
 
