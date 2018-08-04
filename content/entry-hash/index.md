@@ -41,11 +41,8 @@ Note that the item hash algorithm is not affected by this RFC.
 
 ## Explanation
 
-The algorithm has three parts:
-
-1. tag and hash each value in the entry.
-2. order the resulting hashes.
-3. hash the result of concatenating all hashes.
+This section describes the algorithm twice. First in a high level and then a
+more step by step with intermediate values.
 
 For reference, this is the abstract definition of an entry:
 
@@ -57,6 +54,34 @@ type Entry =
   , item : Set Hash
   }
 ```
+
+### The algorithm
+
+When this algorithm operates on _hashes_ (e.g. tag, concatenate) it is done on
+the byte level, not the hexadecimal string representation that the latter
+example shows as partial representations.
+
+1. Let _number_ be the string representation of the entry number.
+2. Let _key_ be the string representation of the entry key.
+3. Let _timestamp_ be the string representation of the entry timestamp.
+4. Let _items_ be the set of item hashes as bytes. Note that
+   the item hashes must not have the prefix (i.e. `sha-256:`) when transformed to
+   bytes.
+5. Let _hashList_ be an empty list.
+6. Apply the _hashValue_ function to _number_ tagged with `i` (Integer). And
+   append the result to _hashList_.
+7. Apply the _hashValue_ function to _key_ tagged with `u` (String). And
+   append the result to _hashList_.
+8. Apply the _hashValue_ function to _timestamp_ tagged with `t` (Timestamp). And
+   append the result to _hashList_.
+9. Map over each value _item_ in the _items_ set:
+   1. Apply the _hashValue_ function to _item_ tagged with `r` (Hash).
+10. Sort the elements of _items_, concatenate them and
+11. Apply the _hashValue_ function tagged with `s` (Set). And append the result
+    to _hashList_.
+12. Concatenate the elements of _hashList_ in order (i.e. `[numberHash,
+    keyHash, timestampHash, itemsHash]`), tag it with `l` (List) and hash the result.
+
 
 To walk through the algorithm I'll use the following entry:
 
@@ -88,18 +113,17 @@ entity. Also notice that the `ID` type is not yet an approved RFC. For this
 RFC this shouldn't be a problem as it works the same as if the type were a
 string.
 
-### Tag and hash each value in the entry
-
 Each value MUST be tagged by a byte that identifies the type, in a similar way
 as the [objecthash](https://github.com/benlaurie/objecthash) algorithm.
 
 ```elm
 type Tag
-  | Hash
+  = Hash
   | Integer
   | Set
   | String
   | Timestamp
+  | List
 
 tagToChar : Tag -> Char
 tagToChar tag =
@@ -114,6 +138,8 @@ tagToChar tag =
       'u'
     Timestamp ->
       't'
+    List ->
+      'l'
 ```
 
 ```elm
@@ -125,7 +151,7 @@ Where:
 * `Alg` is the hashing algorithm (e.g. `Sha256`),
 * `String` is the string representation of the value to hash,
 * `Tag` is the tag for the `Value` type and
-* `Hash` is the hexadecimal _lowercase_ string representation of the hashed bytes.
+* `Hash` is the list of bytes resulting of the hashing algorithm.
 
 Following the JSON example from above, these are the hashes for each value:
 
@@ -134,15 +160,15 @@ numberValue = toString 6
 numberValue == "6"
 
 numberHash = hashValue Sha256 numberValue Integer
-numberHash == "396ee89382efc154e95d7875976cce373a797fe93687ca8a27589116644c4bcd"
+toHex numberHash == "396ee89382efc154e95d7875976cce373a797fe93687ca8a27589116644c4bcd"
 ```
 
 ```elm
 timestampValue = toString (Timestamp 2016 4 5 13 23 5 Utc)
-timestampValue == "2016-04-05T13:23:05Z"
+toHex timestampValue == "2016-04-05T13:23:05Z"
 
 timestampHash = hashValue Sha256 timestampValue Timestamp
-timestampHash == "f22ecc4464f22c8fee624769189665a0afd7ef10a2775a000082c47cbd9f6419"
+toHex timestampHash == "f22ecc4464f22c8fee624769189665a0afd7ef10a2775a000082c47cbd9f6419"
 ```
 
 ```elm
@@ -150,63 +176,20 @@ keyValue = toString (ID "GB")
 keyValue == "GB"
 
 keyHash = hashValue Sha256 keyValue String
-keyHash == "fff7021c7df4426be0f9a3c83f236eb6f85d159e624b010d65e6dde267889c21"
+toHex keyHash == "fff7021c7df4426be0f9a3c83f236eb6f85d159e624b010d65e6dde267889c21"
 ```
 
 The item is a special case:
 
-* It is an array of values.
-* Each value is already a hash. Note that if your implementation has the
-  prefix `sha-256:` it has to be removed before hasing again.
-
-The algorithm:
-
-1. Foreach value, strip out the prefix.
-2. Tag and Hash each value.
-3. Concatenate all hashes in the same order.
-4. Tag and hash the result.
+It is a set of values and each value is already hashed. This means that the
+content of this set only needs a sorted concatenation. Then, tag it as a set
+`s` and hash the result.
 
 ```elm
 hashValueSet : Alg -> Set Hash -> Tag -> Hash
 
 itemHash = hashValueSet Sha256 (Set [Sha256 "6b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"]) Hash
-itemHash == "94923d31e0ee69e40c912b3e0a34b1693d0d23d7049b2a4510c4b33f63850297"
-```
-
-These are the steps for the example above:
-
-1. Transform hashes to strings:
-
-```elm
-values = map toString (Set [Sha256 "6b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"])
-values == Set ["6b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"]
-```
-
-2. Tag and hash:
-
-```elm
-hashedSet =
-  ["6b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"]
-  |> map hashSetValue
-  |> sort
-  where
-    hashSetValue e = hashValue Sha256 e Hash
-
-hashedSet == Set ["63825e4c6f3dd8b229be451b17f57a4e431eb92ae62f9581c9bd268558c27177"]
-```
-
-3. Concatenate:
-
-```elm
-concatHash = concatAll (Set ["63825e4c6f3dd8b229be451b17f57a4e431eb92ae62f9581c9bd268558c27177"])
-concatHash == "63825e4c6f3dd8b229be451b17f57a4e431eb92ae62f9581c9bd268558c27177"
-```
-
-4. Tag and hash:
-
-```
-itemHash = hashValue Sha256 concatHash Set
-itemHash == "94923d31e0ee69e40c912b3e0a34b1693d0d23d7049b2a4510c4b33f63850297"
+toHex itemHash == "94b34bd5705b1a8c31796c00347dad2f5a1364050a1f6b768c7ac289502f62ce"
 ```
 
 ### order the resulting hashes
@@ -226,11 +209,11 @@ Note: The order has been chosen arbitrarily.
 
 ### hash the result of concatenating all hashes
 
-And finally, hash the result of concatenating the list of hashes:
+And finally, tag and hash the result of concatenating the list of hashes:
 
 ```elm
 hash : Alg -> List Hash -> Hash
 
 entryHash = hash Sha256 hashList
-entryHash == "5317fb0c7191e77b9a355bf947e8a2a619121fff65de183709099065b7e143ca"
+entryHash == "cc33f805025fb5bcd43cd9a1d0d77093af443106ff1513a2f5dfff2b81ae4fd3"
 ```
