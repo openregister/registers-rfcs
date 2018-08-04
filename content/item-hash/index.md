@@ -87,7 +87,7 @@ intended to be forward compatible.
 
 ### String normalisation algorithm
 
-1. For ASCII control characters (codepoints 0x00 - 0x1f):
+1. For control characters (codepoints 0x00 - 0x1f):
    1. If it has a short representation (`\b`, `\f`, `\n`, `\r`, or `\t`), that
       short representation MUST be used.
    2. Other control characters (such as `NULL`) MUST be represented as a
@@ -117,25 +117,15 @@ i_1 =
        ]
 ```
 
-Which in JSON are represented as:
-
-```json
-{
-  "foo": "abc",
-  "bar": "xyz"
-}
-```
-
-And
-
-```json
-{
-  "foo": "**REDACTED**2a42a9c91b74c0032f6b8000a2c9c5bcca5bb298f004e8eff533811004dea511",
-  "bar": "xyz"
-}
-```
+The reason they are equivalent is because the hash for `"abc"` is
+"2a42a9c91b74c0032f6b8000a2c9c5bcca5bb298f004e8eff533811004dea511". So when
+the hashing algorithm is applied to the whole item, the redacted value is used
+as is (without the redaction tag).
 
 ### Example
+
+Note: To simplify the code, the hashing algorithm `SHA-256` is implied. A full
+implementation must acknowledge the possibility of a different algorithm.
 
 To walk through the algorithm I'll use the following item:
 
@@ -144,7 +134,7 @@ Dict
   [ ("id", "GB")
   , ("official-name", "The United Kingdom of Great Britain and Northern Ireland")
   , ("name", "United Kingdom")
-  , ("citizen-names", ["Briton", "British citizen"])
+  , ("citizen-names", Set ["Briton", "British citizen"])
   ]
 ```
 
@@ -157,4 +147,89 @@ Which is serialised as JSON as:
   "name": "United Kingdom",
   "citizen-names": ["Briton", "British citizen"]
 }
+```
+
+The following definitions set the context of operation:
+
+```elm
+type Tag
+  = Dict
+  | Set
+  | String
+
+tagToChar : Tag -> Char
+tagToChar tag =
+  case tag of
+    Dict ->
+      'd'
+    Set ->
+      's'
+    String ->
+      'u'
+```
+
+```elm
+hash : Item -> Hash
+```
+
+```elm
+hashString : String -> Hash
+
+hashSet : Set -> Hash
+
+hashValue : Value -> Hash
+hashValue value =
+  case value of
+    VString str ->
+      if startsWith "**REDACTED**" str then
+        hashString (dropLeft 12 str)
+      else
+        hashString str
+    VSet set ->
+      hashSet set
+```
+
+The `hash` function, step by step would roughly look like:
+
+```elm
+id =
+  concat ["17b788a70eeccbdc2fcb2d2d3db216c02fa88ac668beeb164bb2328c864bf3f4", "fff7021c7df4426be0f9a3c83f236eb6f85d159e624b010d65e6dde267889c21"]
+
+id == "d62311d17806761e4195bda80a4ba7f20c8cacc58c3f6f0f1a22e64f47a77651"
+
+officialName =
+  concat ["cf09bea8c0107bd2150b073150d48db0a5b24c83defc7960ed698378d9f84b93", "bf1860175c77869938cf9f4b37edb00f2f387be7b361f9c2c4a2ac202c1ba2e5"]
+
+officialName == "103ea25f856f755082745f183b1f6f41c08b1c35df794d1382650637f35d0949"
+
+name =
+  concat ["5c0be87ed7434d69005f8bbd84cad8ae6abfd49121b4aaeeb4c1f4a2e2987711", "94099b1e0b9a1e673bafee513080197fa1980895ca27e091fdd4c54fab2bed24"]
+
+name == "df50f7bd9e6af8c5dd009f99e66a0192ca6204c4b7e45ee79e4a89d1d7ace200"
+
+citizenNameSet =
+  ["3d76c67f95cb9c4fc8e9dfdaa1d0ac4cbf6feba4dc7521429618afad925a3922", "f59ca1c4c086398b98aa6ad3ab2b14c4c1a15c225da73c706f5023115a7acd50"]
+  |> concat
+  |> cons 's'
+  |> hashTagged
+
+citizenNameSet == "1b68822ac12017ae10eebcce34c4cd5e07d83b6c76bdca8f14eb54ab60096269"
+
+citizenNames =
+  concat ["bb3a7ac86d4f90c20d099992de0bd09bf3c4f27169c2cd873836762b01d5a2be", "1b68822ac12017ae10eebcce34c4cd5e07d83b6c76bdca8f14eb54ab60096269"]
+
+citizenNames == "c8a2625212e2bac74346c60ae4988aa9978958918bd1455e35e6d0670af15ff3"
+```
+
+Then sort and aggregate the partial results:
+
+```elm
+itemHash =
+  [id, officialName, name, citizenNames]
+  |> sort
+  |> concat
+  |> cons 'd'
+  |> hashTagged
+
+itemHash == "5bc0163d594fb6e958d2758eff074fb4d25cd3f3867ff30e9cbe982c59cb90b5"
 ```
