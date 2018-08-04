@@ -62,6 +62,10 @@ intended to be forward compatible.
 
 ### Algorithm
 
+When this algorithm operates on _hashes_ (e.g. tag, concatenate) it is done on
+the byte level, not the hexadecimal string representation that the latter
+example shows as partial representations.
+
 1. Let _item_ be the blob of data to hash.
 2. Let _hashList_ be an empty list.
 2. Foreach _(attr, value)_ pair in _item_:
@@ -73,8 +77,8 @@ intended to be forward compatible.
             to _elList_.
          2. Otherwise, normalise _el_ according to [string normalisation](#string-normalisation-algorithm)
             tag it with `u` (String), hash it and append it to _elList_.
-         3. Concatenate _elList_ elements, tag it with `s` (Set), hash it and set
-            it to _valueHash_.
+      3. Concatenate _elList_ elements, tag it with `s` (Set), hash it and set
+         it to _valueHash_.
    3. If _value_ starts with `**REDACTED**`, set _normValue_ with _value_
       without `**REDACTED**`.
    4. Otherwise, normalise _value_ according to [string normalisation](#string-normalisation-algorithm)
@@ -169,67 +173,41 @@ tagToChar tag =
 ```
 
 ```elm
-hash : Item -> Hash
-```
+hashTagged : String -> Hash
 
-```elm
 hashString : String -> Hash
 
 hashSet : Set -> Hash
 
 hashValue : Value -> Hash
-hashValue value =
-  case value of
-    VString str ->
-      if startsWith "**REDACTED**" str then
-        hashString (dropLeft 12 str)
-      else
-        hashString str
-    VSet set ->
-      hashSet set
+
+hashPair : (String, Value) -> List Hash
+```
+
+```elm
+hash : Item -> Hash
 ```
 
 The `hash` function, step by step would roughly look like:
 
 ```elm
-id =
-  concat ["17b788a70eeccbdc2fcb2d2d3db216c02fa88ac668beeb164bb2328c864bf3f4", "fff7021c7df4426be0f9a3c83f236eb6f85d159e624b010d65e6dde267889c21"]
+id = hashPair ("id", "GB")
+id == "17b788a70eeccbdc2fcb2d2d3db216c02fa88ac668beeb164bb2328c864bf3f4fff7021c7df4426be0f9a3c83f236eb6f85d159e624b010d65e6dde267889c21"
 
-id == "d62311d17806761e4195bda80a4ba7f20c8cacc58c3f6f0f1a22e64f47a77651"
+officialName = hashPair ("official-name", "The United Kingdom of Great Britain and Northern Ireland")
+officialName == "cf09bea8c0107bd2150b073150d48db0a5b24c83defc7960ed698378d9f84b93bf1860175c77869938cf9f4b37edb00f2f387be7b361f9c2c4a2ac202c1ba2e5"
 
-officialName =
-  concat ["cf09bea8c0107bd2150b073150d48db0a5b24c83defc7960ed698378d9f84b93", "bf1860175c77869938cf9f4b37edb00f2f387be7b361f9c2c4a2ac202c1ba2e5"]
+name = hashPair ("name", "United Kingdom")
+name == "5c0be87ed7434d69005f8bbd84cad8ae6abfd49121b4aaeeb4c1f4a2e298771194099b1e0b9a1e673bafee513080197fa1980895ca27e091fdd4c54fab2bed24"
 
-officialName == "103ea25f856f755082745f183b1f6f41c08b1c35df794d1382650637f35d0949"
-
-name =
-  concat ["5c0be87ed7434d69005f8bbd84cad8ae6abfd49121b4aaeeb4c1f4a2e2987711", "94099b1e0b9a1e673bafee513080197fa1980895ca27e091fdd4c54fab2bed24"]
-
-name == "df50f7bd9e6af8c5dd009f99e66a0192ca6204c4b7e45ee79e4a89d1d7ace200"
-
-citizenNameSet =
-  ["3d76c67f95cb9c4fc8e9dfdaa1d0ac4cbf6feba4dc7521429618afad925a3922", "f59ca1c4c086398b98aa6ad3ab2b14c4c1a15c225da73c706f5023115a7acd50"]
-  |> concat
-  |> cons 's'
-  |> hashTagged
-
-citizenNameSet == "1b68822ac12017ae10eebcce34c4cd5e07d83b6c76bdca8f14eb54ab60096269"
-
-citizenNames =
-  concat ["bb3a7ac86d4f90c20d099992de0bd09bf3c4f27169c2cd873836762b01d5a2be", "1b68822ac12017ae10eebcce34c4cd5e07d83b6c76bdca8f14eb54ab60096269"]
-
-citizenNames == "c8a2625212e2bac74346c60ae4988aa9978958918bd1455e35e6d0670af15ff3"
+citizenNames = hashPair ("citizen-names", Set ["Briton", "British citizen"])
+citizenNames == "bb3a7ac86d4f90c20d099992de0bd09bf3c4f27169c2cd873836762b01d5a2be16897987a6ee59d9ffdb456ed02df34a79b05346498d4360172568101ae157c1"
 ```
 
-Then sort and aggregate the partial results:
+Then combine the partial results and tag it as a dictionary:
 
 ```elm
-itemHash =
-  [id, officialName, name, citizenNames]
-  |> sort
-  |> concat
-  |> cons 'd'
-  |> hashTagged
+itemHash = hashDict [id, officialName, name, citizenNames]
 
-itemHash == "5bc0163d594fb6e958d2758eff074fb4d25cd3f3867ff30e9cbe982c59cb90b5"
+itemHash == "45d9392ad17cead3fa46501eba3e5ac237cb46a39f1e175905f00ef6a6667257"
 ```
