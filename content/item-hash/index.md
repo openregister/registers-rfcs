@@ -85,11 +85,27 @@ example shows as partial representations.
       tag it with `u` (String), hash it and set _valueHash_.
    5. Tag _attr_ with `u` (String), hash it and set _attrHash_.
    6. Concat _attrHash_ and _valueHash_ and append to _hashList_.
-3. Sort _hashList_.
+3. [Sort](#sorting) _hashList_.
 4. Concat _hashList_ elements, tag with `d`, hash it and return.
 
 
-### String normalisation algorithm
+#### Sorting
+
+The sorting algorithm for a set of hashes is done by comparing the list of
+bytes one by one. For example, given a set `["foo", "bar"]` you'll get the
+folllowing byte lists after hashing them as unicode:
+
+ ```elm
+[ [166,166,229,231,131,195,99,205,149,105,62,193,137,194,104,35,21,217,86,134,147,151,115,134,121,181,99,5,242,9,80,56]
+, [227,3,206,11,208,244,193,253,254,76,193,232,55,215,57,18,65,226,224,71,223,16,250,97,1,115,61,193,32,103,93,254]
+]
+```
+
+ In this case, the set is already sorted given that `166` is smaller than
+`227`.
+
+
+#### String normalisation algorithm
 
 1. For control characters (codepoints 0x00 - 0x1f):
    1. If it has a short representation (`\b`, `\f`, `\n`, `\r`, or `\t`), that
