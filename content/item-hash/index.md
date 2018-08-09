@@ -211,3 +211,7 @@ itemHash = hashDict [id, officialName, name, citizenNames]
 
 itemHash == "45d9392ad17cead3fa46501eba3e5ac237cb46a39f1e175905f00ef6a6667257"
 ```
+
+### Security considerations
+
+This algorithm is as secure as the previous one.
