@@ -232,6 +232,33 @@ itemHash = hashDict [id, officialName, name, citizenNames]
 itemHash == "45d9392ad17cead3fa46501eba3e5ac237cb46a39f1e175905f00ef6a6667257"
 ```
 
+### Redaction
+
+Now, let's redact part of the original item. From:
+
+
+```elm
+Dict
+  [ ("id", "GB")
+  , ("official-name", "The United Kingdom of Great Britain and Northern Ireland")
+  , ("name", "United Kingdom")
+  , ("citizen-names", Set ["Briton", "British citizen"])
+  ]
+```
+
+To:
+
+```elm
+Dict
+  [ ("id", "GB")
+  , ("official-name", "**REDACTED**cf09bea8c0107bd2150b073150d48db0a5b24c83defc7960ed698378d9f84b93bf1860175c77869938cf9f4b37edb00f2f387be7b361f9c2c4a2ac202c1ba2e5")
+  , ("name", "United Kingdom")
+  , ("citizen-names", Set ["Briton", "British citizen"])
+  ]
+```
+
+The resulting hash would be the same "45d9392ad17cead3fa46501eba3e5ac237cb46a39f1e175905f00ef6a6667257".
+
 ### Security considerations
 
 This algorithm is as secure as the previous one.
