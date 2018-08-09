@@ -89,6 +89,10 @@ example shows as partial representations.
 4. Concat _hashList_ elements, tag with `d`, hash it and return.
 
 
+Note: Any time the algorithm says "tag with" it means to prepend the byte
+corresponding to the tag (e.g. 0x70) to the list of bytes of the thing to tag.
+
+
 #### Sorting
 
 The sorting algorithm for a set of hashes is done by comparing the list of
