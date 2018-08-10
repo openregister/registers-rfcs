@@ -1,6 +1,7 @@
 ---
 rfc: 0000
 start_date: 2018-08-09
+decision_date:
 pr:
 status: draft
 ---
@@ -51,6 +52,8 @@ You should provide some metadata:
 
 * `rfc` : The next number in sequence.
 * `start_date`: The date the RFC started in ISO8601.
+* `decision_date`: The date the RFC reached agreement in ISO8601 (i.e. it
+  became either accepted or rejected).
 * `pr`: Once the RFC has a pull request open, the reference to it.
 * `status`: The status of the RFC (`draft`, `approved`, `rejected`).
 
