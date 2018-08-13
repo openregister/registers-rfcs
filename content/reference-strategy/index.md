@@ -1,8 +1,9 @@
 ---
 rfc: 0005
 start_date: 2018-03-29
+decision_date: 2018-08-13
 pr: openregister/registers-rfcs#11
-status: draft
+status: approved
 ---
 
 # Reference strategy
