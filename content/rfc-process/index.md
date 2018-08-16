@@ -1,9 +1,9 @@
 ---
 rfc: 0000
 start_date: 2018-08-09
-decision_date:
-pr:
-status: draft
+decision_date: 2018-08-16
+pr: openregister/registers-rfcs/pull/25
+status: approved
 ---
 
 # RFC process
