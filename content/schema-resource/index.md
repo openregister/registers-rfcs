@@ -1,7 +1,7 @@
 ---
-rfc:
+rfc: 0015
 start_date: 2018-02-09
-pr:
+pr: openregister/registers-rfcs#28
 status: draft
 ---
 
