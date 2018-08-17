@@ -27,8 +27,10 @@ from that standards ecosystem.
 
 The proposal is to adopt [Multihash](https://multiformats.io/multihash/).
 Their specification is quite thorough but the gist is to replace any of our
-`sha-256:` to `1220`. `0x12` for the hashing function sha2-256 and `0x20` for
-the digest length.
+`sha-256:` to `1220`.
+
+* `0x12` stringified as `12`: Hashing function sha2-256.
+* `0x20` stringified as `20`: Digest length.
 
 For example, instead of the current JSON:
 
