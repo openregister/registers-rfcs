@@ -49,11 +49,15 @@ GET /summary
 |`custodian`| Optional String |The custodian of the register.|
 |`description`| Optional String |The description of the register.|
 |`hashing-algorithm`| [HashingAlgorithm](#hahing-algorithm-attributes) |The hahing algorithm used throught the register.|
+|`root-hash`| Hash | The Merkle tree root hash. |
 |`last-updated`| Timestamp |The date the register was last updated.|
 |`licence`| String |The licence of the data.|
 |`total-entries`| Integer |The number of entries in the register.|
 |`total-items`| Integer |The number of items in the register.|
 |`total-records`| Integer |The number of records in the register.|
+
+This RFC doesn't include anything related to signing root hashes. A future RFC
+will expand this resource with it.
 
 #### Hashing algorithm attributes
 
