@@ -23,6 +23,9 @@ more the day the schema gets the ability to evolve.
 
 ## Explanation
 
+Note: All datatypes mentioned in this RFC are defined by the specification. In
+a few cases like `Cardinality` or `Datatype` it is described inline.
+
 ***
 ### Endpoint
 
@@ -48,10 +51,10 @@ GET /schema
 
 |Name|Type|Description|
 |-|-|-|
-|`label` | `Attrname` | The attribute machine-readable name.|
+|`label` | `Attrname` | The attribute machine-readable name. (`[a-z][a-z0-9-]*`)|
 |`title` | `String` | The attribute human-readable title.|
 |`description` | `Text` | The attribute description.|
-|`datatype` | `Datatype` | The attribute datatype.|
+|`datatype` | `Datatype` | The attribute datatype. (one of `curie`, `datetime`, `attrname`, `hash`, `integer`, `period`, `string`, `text`, `url`)|
 |`cardinality` | `Cardinality` | The attribute cardinality (either `1` or `n`).|
 ***
 
