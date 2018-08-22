@@ -2,10 +2,16 @@
 rfc: 0015
 start_date: 2018-02-09
 pr: openregister/registers-rfcs#28
-status: draft
+status: rejected
 ---
 
 # Schema resource
+
+This RFC has been rejected (see comments
+https://github.com/openregister/registers-rfcs/pull/28).
+
+In summary, this resource doesn't fit well with the broader metadata stream of
+work. Schema will be addressed in a future RFC.
 
 ## Summary
 
