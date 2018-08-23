@@ -53,7 +53,7 @@ Accept: application/json
 HTTP/1.1 410 Gone
 Content-Type: application/json
 
-**REDACTED**sha-256:6b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb
+"**REDACTED**sha-256:6b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"
 ```
 
 With RFC0013 in mind, this is the expected behaviour:
@@ -69,7 +69,7 @@ Accept: application/json
 HTTP/1.1 410 Gone
 Content-Type: application/json
 
-**REDACTED**12206b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb
+"**REDACTED**12206b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"
 ```
 
 For CSV, the payload MUST be the same as the expected list of attributes
