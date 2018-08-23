@@ -111,15 +111,8 @@ folllowing byte lists after hashing them as unicode:
 
 #### String normalisation algorithm
 
-1. For control characters (codepoints 0x00 - 0x1f):
-   1. If it has a short representation (`\b`, `\f`, `\n`, `\r`, or `\t`), that
-      short representation MUST be used.
-   2. Other control characters (such as `NULL`) MUST be represented as a
-      `\u00XX` escape sequence. Hexadecimal digits MUST be upper-case.
-2. Backslash (`\`) and double quote (`"`) MUST be escaped as `\\` and `\"`
-   respectively.
-3. All other characters MUST be included literally (i.e. unescaped). This
-   includes forward-slash (`/`).
+A string should be in the NFC form as defined by  the Unicode standard:
+https://en.wikipedia.org/wiki/Unicode_equivalence
 
 
 ### Redaction
