@@ -10,7 +10,7 @@ status: draft
 ## Summary
 
 This RFC proposes an algorithm to hash items such that data can be redacted
-without breaking the integrity of the register.
+at any granularity without breaking the integrity of the register.
 
 **This RFC is not backwards compatible**
 
