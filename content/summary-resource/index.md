@@ -1,11 +1,18 @@
 ---
 rfc: 0014
 start_date: 2018-08-13
-pr:
-status: draft
+decision_date: 2018-08-24
+pr: openregister/registers-rfcs#27
+status: rejected
 ---
 
 # Summary resource
+
+This RFC has been rejected (see comments
+https://github.com/openregister/registers-rfcs/pull/27).
+
+In summary, this resource doesn't fit well with the broader metadata stream of
+work. RFC0018 Context resource obsoltes this one.
 
 ## Summary
 
