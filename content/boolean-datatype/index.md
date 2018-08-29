@@ -1,9 +1,9 @@
 ---
 rfc: 0019
 start_date: 2018-08-23
-decision_date:
+decision_date: 2018-08-29
 pr: openregister/registers-rfcs#32
-status: draft
+status: approved
 ---
 
 # Boolean datatype
