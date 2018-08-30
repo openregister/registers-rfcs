@@ -1,5 +1,5 @@
 ---
-rfc:
+rfc: 0010
 start_date: 2018-08-03
 pr:
 status: draft
@@ -49,8 +49,8 @@ For reference, this is the abstract definition of an item:
 
 ```elm
 type Value
-  = VString String    -- cardinality 1
-  | VSet (Set String) -- cardinality n
+  = StringValue String    -- cardinality 1
+  | SetValue (Set String) -- cardinality n
 
 type Item =
   Dict String Value
