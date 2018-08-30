@@ -1,7 +1,7 @@
 ---
 rfc: 0010
 start_date: 2018-08-03
-pr:
+pr: openregister/registers-rfcs#24
 status: draft
 ---
 
@@ -68,6 +68,7 @@ example shows as partial representations.
 
 1. Let _item_ be the normalised blob of data to hash.
 2. Let _hashList_ be an empty list.
+3. Let _valueHash_ be null.
 3. Foreach _(attr, value)_ pair in _item_:
    1. If _value_ is null, continue.
    2. If _value_ is a Set:
@@ -79,12 +80,12 @@ example shows as partial representations.
             tag it with `u` (String), hash it and append it to _elList_.
          3. Concatenate _elList_ elements, [sort](#sorting) them, tag it with `s`
             (Set), hash it and set it to _valueHash_.
-   3. If _value_ starts with `**REDACTED**`, set _normValue_ with _value_
+   3. If _value_ starts with `**REDACTED**`, set _valueHash_ with _value_
       without `**REDACTED**`.
    4. Otherwise, normalise _value_ according to [string normalisation](#string-normalisation-algorithm)
       tag it with `u` (String), hash it and set _valueHash_.
    5. Tag _attr_ with `u` (String), hash it and set _attrHash_.
-   6. Concat _attrHash_ and _valueHash_ and append to _hashList_.
+   6. Concat _attrHash_ and _valueHash_ in this order, and append to _hashList_.
 4. [Sort](#sorting) _hashList_.
 5. Concat _hashList_ elements, tag with `d`, hash it and return.
 
@@ -196,7 +197,7 @@ hashSet : Set -> Hash
 
 hashValue : Value -> Hash
 
-hashPair : (String, Value) -> Hash
+hashPair : (String, Value) -> List Byte
 ```
 
 ```elm
@@ -246,7 +247,7 @@ To:
 ```elm
 Dict
   [ ("id", "GB")
-  , ("official-name", "**REDACTED**cf09bea8c0107bd2150b073150d48db0a5b24c83defc7960ed698378d9f84b93bf1860175c77869938cf9f4b37edb00f2f387be7b361f9c2c4a2ac202c1ba2e5")
+  , ("official-name", "**REDACTED**bf1860175c77869938cf9f4b37edb00f2f387be7b361f9c2c4a2ac202c1ba2e5")
   , ("name", "United Kingdom")
   , ("citizen-names", Set ["Briton", "British citizen"])
   ]
