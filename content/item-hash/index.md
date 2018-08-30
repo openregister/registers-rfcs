@@ -66,9 +66,9 @@ When this algorithm operates on _hashes_ (e.g. tag, concatenate) it is done on
 the byte level, not the hexadecimal string representation that the latter
 example shows as partial representations.
 
-1. Let _item_ be the blob of data to hash.
+1. Let _item_ be the normalised blob of data to hash.
 2. Let _hashList_ be an empty list.
-2. Foreach _(attr, value)_ pair in _item_:
+3. Foreach _(attr, value)_ pair in _item_:
    1. If _value_ is null, continue.
    2. If _value_ is a Set:
       1. Let _elList_ be an empty list.
@@ -77,20 +77,22 @@ example shows as partial representations.
             to _elList_.
          2. Otherwise, normalise _el_ according to [string normalisation](#string-normalisation-algorithm)
             tag it with `u` (String), hash it and append it to _elList_.
-      3. Concatenate _elList_ elements, tag it with `s` (Set), hash it and set
-         it to _valueHash_.
+         3. Concatenate _elList_ elements, [sort](#sorting) them, tag it with `s`
+            (Set), hash it and set it to _valueHash_.
    3. If _value_ starts with `**REDACTED**`, set _normValue_ with _value_
       without `**REDACTED**`.
    4. Otherwise, normalise _value_ according to [string normalisation](#string-normalisation-algorithm)
       tag it with `u` (String), hash it and set _valueHash_.
    5. Tag _attr_ with `u` (String), hash it and set _attrHash_.
    6. Concat _attrHash_ and _valueHash_ and append to _hashList_.
-3. [Sort](#sorting) _hashList_.
-4. Concat _hashList_ elements, tag with `d`, hash it and return.
+4. [Sort](#sorting) _hashList_.
+5. Concat _hashList_ elements, tag with `d`, hash it and return.
 
 
 Note: Any time the algorithm says "tag with" it means to prepend the byte
-corresponding to the tag (e.g. 0x70) to the list of bytes of the thing to tag.
+corresponding to the tag (e.g. `0x70`) to the list of bytes of the thing to tag.
+
+Note: Blob normalisation will be addressed in another RFC.
 
 
 #### Sorting
@@ -105,13 +107,13 @@ folllowing byte lists after hashing them as unicode:
 ]
 ```
 
- In this case, the set is already sorted given that `166` is smaller than
+In this case, the set is already sorted given that `166` is smaller than
 `227`.
 
 
 #### String normalisation algorithm
 
-A string should be in the NFC form as defined by  the Unicode standard:
+A string should be in the NFC form as defined by the Unicode standard:
 https://en.wikipedia.org/wiki/Unicode_equivalence
 
 
@@ -194,7 +196,7 @@ hashSet : Set -> Hash
 
 hashValue : Value -> Hash
 
-hashPair : (String, Value) -> List Hash
+hashPair : (String, Value) -> Hash
 ```
 
 ```elm
