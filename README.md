@@ -20,7 +20,7 @@ REST API).
 |0007|Metadata log|draft|-|#20|
 |0008|[Entry key constraints](content/entry-key-constraints/index.md)|approved|2018-08-24|#22|
 |0009|[Entry hash](content/entry-hash/index.md)|approved|2018-08-30|#23|
-|0010|Item hash|draft|-|#24|
+|0010|[Item hash](content/item-hash/index.md)|approved|2018-08-31|#24|
 |0011|Entry invalidation|draft|-|#9|
 |0012|Add and subtract operations (schema evolution)|draft|-|#6|
 |0013|Multihash|draft|-|#26|
