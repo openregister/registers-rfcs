@@ -1,8 +1,9 @@
 ---
 rfc: 0009
 start_date: 2018-08-02
+decision_date: 2018-08-30
 pr: openregister/registers-rfcs#23
-status: draft
+status: approved
 ---
 
 # Entry hash
