@@ -1,6 +1,7 @@
 ---
 rfc: 0004
 start_date: 2018-07-26
+decision_date: 2018-07-26
 pr: openregisters/registers-rfc#21
 status: approved
 ---
