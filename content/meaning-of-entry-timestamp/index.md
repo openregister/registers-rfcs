@@ -1,6 +1,7 @@
 ---
 rfc: 0003
 start_date: 2018-04-26
+decision_date: 2018-05-01
 pr: openregisters/registers-rfc#16
 status: approved
 ---
