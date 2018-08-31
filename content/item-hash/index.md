@@ -1,8 +1,9 @@
 ---
 rfc: 0010
 start_date: 2018-08-03
+decision_date: 2018-08-31
 pr: openregister/registers-rfcs#24
-status: draft
+status: approved
 ---
 
 # Item hash with redaction
