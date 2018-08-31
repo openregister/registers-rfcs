@@ -1,6 +1,7 @@
 ---
 rfc: 0015
 start_date: 2018-02-09
+decision_date: 2018-08-22
 pr: openregister/registers-rfcs#28
 status: rejected
 ---
