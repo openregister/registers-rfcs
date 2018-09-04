@@ -9,12 +9,9 @@ status: draft
 
 ## Summary
 
-This RFC proposes a way to signal an item has been fully redacted.
-
-Dependencies:
-
-* [RFC0010: Item hash](https://github.com/openregister/registers-rfcs/pull/24).
-* [RFC0013: Multihash](https://github.com/openregister/registers-rfcs/pull/26).
+This RFC proposes removing the old partially defined item redaction solution
+in favour of [RFC0010: Item
+hash](https://github.com/openregister/registers-rfcs/pull/24).
 
 
 ## Motivation
@@ -29,19 +26,30 @@ Registers core team, a while ago it was decided that to fully redact an item,
 the HTTP response would be a `410 Gone`. The specification doesn't reflect
 this decision nor the details.
 
+After some effort trying to define how this solution works for items and
+records I have came to the conclusion that it is a broken solution. The
+fundamental problem lays on the fact that a record is an entry with the item
+embedded. In JSON it is possible to show that the item is redacted (or some of
+them if the entry has many items). In CSV it's not possible without changing
+the column structure which would cause problems to any user consuming records
+expecting a particular column structure.
+
+Worth mentioning that `410 Gone` can't be applied to a record because it is an
+entry and these never get removed or redacted.
+
 
 ## Explanation
 
-A fully redacted item MUST respond with a `410 Gone` HTTP status keeping the
-same payload structure as a `200 OK` response but redacted following RFC0010
-`**REDACTED**` mark and strategy.
+A fully redacted blob MUST be done by redacting every value according to
+RFC0010.
 
-Note: Partially redacted items are addressed by RFC0010.
+Both item and record resource MUST return a `200 OK` response serialised with
+the requested content type if available.
 
 ***
 **EXAMPLE:**
 
-For example,
+For example, a redacted blob in JSON:
 
 ```http
 GET /items/sha-256:6b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb HTTP/1.1
@@ -50,60 +58,44 @@ Accept: application/json
 ```
 
 ```http
-HTTP/1.1 410 Gone
+HTTP/1.1 200 OK
 Content-Type: application/json
 
-"**REDACTED**sha-256:6b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"
+{
+  "country": "**REDACTED**fff7021c7df4426be0f9a3c83f236eb6f85d159e624b010d65e6dde267889c21",
+  "official-name": "**REDACTED**bf1860175c77869938cf9f4b37edb00f2f387be7b361f9c2c4a2ac202c1ba2e5",
+  "name": "**REDACTED**94099b1e0b9a1e673bafee513080197fa1980895ca27e091fdd4c54fab2bed24",
+  "citizen-names": "**REDACTED**e6ec7637c8df22f85b49d91ac98a37c96372cf3328e1b5aa96e00af1658f0dc0"
+}
 ```
 
-With RFC0013 in mind, this is the expected behaviour:
-
+And in CSV:
 
 ```http
-GET /items/12206b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb HTTP/1.1
+GET /items/sha-256:6b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb HTTP/1.1
+Host: country.register.gov.uk
+Accept: text/csv;charset=UTF-8
+```
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/csv;charset=UTF-8
+
+country, official-name, name, citizen-names
+**REDACTED**fff7021c7df4426be0f9a3c83f236eb6f85d159e624b010d65e6dde267889c21, **REDACTED**bf1860175c77869938cf9f4b37edb00f2f387be7b361f9c2c4a2ac202c1ba2e5, **REDACTED**94099b1e0b9a1e673bafee513080197fa1980895ca27e091fdd4c54fab2bed24, **REDACTED**e6ec7637c8df22f85b49d91ac98a37c96372cf3328e1b5aa96e00af1658f0dc0
+```
+
+Similarly, a record would be redacted like:
+
+```http
+GET /records/GB HTTP/1.1
 Host: country.register.gov.uk
 Accept: application/json
 ```
 
 ```http
-HTTP/1.1 410 Gone
+HTTP/1.1 200 OK
 Content-Type: application/json
-
-"**REDACTED**12206b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"
-```
-
-For CSV, the response MUST be the same, in JSON:
-
-```http
-GET /items/12206b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb HTTP/1.1
-Host: country.register.gov.uk
-Accept: text/csv;charset=UTF-8
-```
-
-```http
-HTTP/1.1 410 Gone
-Content-Type: application/json
-
-"**REDACTED**12206b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"
-```
-***
-
-### Implications for records
-
-A record with a redacted item should inline the redacted item:
-
-
-```http
-GET /items/12206b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb HTTP/1.1
-Host: country.register.gov.uk
-Accept: text/csv;charset=UTF-8
-```
-
-```http
-HTTP/1.1 410 Gone
-Content-Type: application/json
-
-"**REDACTED**12206b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"
 
 {
   "GB": {
@@ -111,7 +103,14 @@ Content-Type: application/json
     "entry-number": 6,
     "entry-timestamp": "2016-04-05T13:23:05Z",
     "key":"GB",
-    "item":["**REDACTED**12206b18693874513ba13da54d61aafa7cad0c8f5573f3431d6f1c04b07ddb27d6bb"]
+    "item":[
+      {
+        "country": "**REDACTED**fff7021c7df4426be0f9a3c83f236eb6f85d159e624b010d65e6dde267889c21",
+        "official-name": "**REDACTED**bf1860175c77869938cf9f4b37edb00f2f387be7b361f9c2c4a2ac202c1ba2e5",
+        "name": "**REDACTED**94099b1e0b9a1e673bafee513080197fa1980895ca27e091fdd4c54fab2bed24",
+        "citizen-names": "**REDACTED**e6ec7637c8df22f85b49d91ac98a37c96372cf3328e1b5aa96e00af1658f0dc0"
+      }
+    ]
   }
 }
 ```
