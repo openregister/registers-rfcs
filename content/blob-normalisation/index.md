@@ -10,7 +10,8 @@ status: draft
 ## Summary
 
 This RFC proposes an algorithm to normalise blobs of data such that the
-hashing algorithm (RFC0010) is predictable.
+hashing algorithm (RFC0010) is predictable. This RFC replaces the item
+canonicalisation obsoleted by RFC0010.
 
 Note that throughout this RFC _blob_ and _item_ are used interchangeably.
 
