@@ -1,8 +1,9 @@
 ---
 rfc: 0013
 start_date: 2018-08-13
+decision_date: 2018-09-04
 pr: openregister/registers-rfcs/pull/26
-status: draft
+status: approved
 ---
 
 # Multihash
