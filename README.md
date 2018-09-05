@@ -23,7 +23,7 @@ REST API).
 |0010|[Item hash](content/item-hash/index.md)|approved|2018-08-31|#24|
 |0011|Entry invalidation|draft|-|#9|
 |0012|Add and subtract operations (schema evolution)|draft|-|#6|
-|0013|Multihash|draft|-|#26|
+|0013|[Multihash](content/multihash/index.md)|approved|2018-09-04|#26|
 |0014|[Summary resource](content/summary-resource/index.md)|rejected|2018-08-24|#27|
 |0015|[Schema resource](content/schema-resource/index.md)|rejected|2018-08-22|#28|
 |0016|Blob resource|draft|-|#29|
