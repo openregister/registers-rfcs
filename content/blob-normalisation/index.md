@@ -1,8 +1,9 @@
 ---
 rfc: 0020
 start_date: 2018-08-30
+decision_date: 2018-09-07
 pr: openregisters/registers-rfc#33
-status: draft
+status: approved
 ---
 
 # Blob normalisation

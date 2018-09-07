@@ -30,7 +30,7 @@ REST API).
 |0017|Full item redaction|draft|-|#30|
 |0018|Context resource|draft|-|#31|
 |0019|[Boolean datatype](content/boolean-datatype/index.md)|approved|2018-08-29|#32|
-|0020|Blob normalisation|draft|-|#33|
+|0020|[Blob normalisation](content/blob-normalisation/index.md)|approved|2018-09-07|#33|
 
 ## Licence
 
