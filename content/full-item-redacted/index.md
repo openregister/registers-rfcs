@@ -1,8 +1,9 @@
 ---
 rfc: 0017
 start_date: 2018-08-23
+decision_date: 2018-09-25
 pr: openregister/registers-rfcs#30
-status: draft
+status: approved
 ---
 
 # Full item redaction
