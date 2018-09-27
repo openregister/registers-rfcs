@@ -39,14 +39,14 @@ The decision logic is as follows:
 
 1. Let _req_ be the incoming request.
 2. If _req_ has an extension:
-  1. If it is `.zip`, return (200, `application/octet-stream`)
-  2. If it is `.rsf`, return (200, `application/vnd.rsf`)
-  3. Otherwise, return 406, Not Acceptable.
+    1. If it is `.zip`, return (200, `application/octet-stream`)
+    2. If it is `.rsf`, return (200, `application/vnd.rsf`)
+    3. Otherwise, return 406, Not Acceptable.
 3. If _req_ has an `Accept` header:
-  1. If it is `application/octet-stream`, return (200, `application/octet-stream`)
-  2. If it is `application/vnd.rsf`, return (200, `application/vnd.rsf`)
-  3. If it is `application/uk-gov-rsf`, return (200, `application/vnd.rsf`)
-  4. Otherwise, return 406, Not Acceptable.
+    1. If it is `application/octet-stream`, return (200, `application/octet-stream`)
+    2. If it is `application/vnd.rsf`, return (200, `application/vnd.rsf`)
+    3. If it is `application/uk-gov-rsf`, return (200, `application/vnd.rsf`)
+    4. Otherwise, return 406, Not Acceptable.
 4. Otherwise, return (200, `application/octet-stream`)
 
 
