@@ -82,7 +82,7 @@ GET /archive?from={n}&to={n}
 Parameters:
 
 |Name|Type|Description|
-|-|-|
+|-|-|-|
 |from|Integer|The log size to use as starting point for the slice|
 |to|Integer|The log size to use as ending point for the slice|
 
