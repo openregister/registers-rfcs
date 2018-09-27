@@ -31,6 +31,7 @@ REST API).
 |0018|Context resource|draft|-|#31|
 |0019|[Boolean datatype](content/boolean-datatype/index.md)|approved|2018-08-29|#32|
 |0020|[Blob normalisation](content/blob-normalisation/index.md)|approved|2018-09-07|#33|
+|0021|Archive resource|draft||#35|
 
 ## Licence
 
