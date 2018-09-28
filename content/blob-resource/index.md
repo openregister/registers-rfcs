@@ -1,8 +1,9 @@
 ---
 rfc: 0016
 start_date: 2018-08-22
+decision_date: 2018-09-28
 pr: openregister/registers-rfcs#29
-status: draft
+status: approved
 ---
 
 # Blob resource
