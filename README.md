@@ -32,6 +32,7 @@ REST API).
 |0019|[Boolean datatype](content/boolean-datatype/index.md)|approved|2018-08-29|#32|
 |0020|[Blob normalisation](content/blob-normalisation/index.md)|approved|2018-09-07|#33|
 |0021|Archive resource|draft||#35|
+|0022|Facets endpoint|draft||#39|
 
 ## Licence
 
