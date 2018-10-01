@@ -33,6 +33,7 @@ REST API).
 |0020|[Blob normalisation](content/blob-normalisation/index.md)|approved|2018-09-07|#33|
 |0021|Archive resource|draft||#35|
 |0022|Facets endpoint|draft||#39|
+|0023|Proof resource|draft||#40|
 
 ## Licence
 
