@@ -34,6 +34,7 @@ REST API).
 |0021|Archive resource|draft||#35|
 |0022|Facets endpoint|draft||#39|
 |0023|Proof resource|draft||#40|
+|0024|Indexes removal|draft||#41|
 
 ## Licence
 
