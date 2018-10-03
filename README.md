@@ -35,6 +35,7 @@ REST API).
 |0022|Facets endpoint|draft||#39|
 |0023|Proof resource|draft||#40|
 |0024|Indexes removal|draft||#41|
+|0025|Snapshot resource|draft||#42|
 
 ## Licence
 
