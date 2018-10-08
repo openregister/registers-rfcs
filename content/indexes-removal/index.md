@@ -65,7 +65,7 @@ changing the entry hash (RFC0009) algorithm as follows:
 5. Let _blob_ be the list of bytes of the blob hash.
 6. Apply the _hashValue_ function to _number_ tagged with `0x69` (Integer). And
    append the result to _hashList_.
-7. Apply the _hashValue_ function to _key_ tagged with `0x74` (String). And
+7. Apply the _hashValue_ function to _key_ tagged with `0x75` (String). And
    append the result to _hashList_.
 8. Apply the _hashValue_ function to _timestamp_ tagged with `0x74` (Timestamp). And
    append the result to _hashList_.
