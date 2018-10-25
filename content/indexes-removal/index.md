@@ -1,9 +1,9 @@
 ---
 rfc: 0024
 start_date: 2018-10-02
-decision_date:
+decision_date: 2018-10-25
 pr: openregister/registers-rfcs#41
-status: draft
+status: approved
 ---
 
 # Indexes removal

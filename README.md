@@ -34,7 +34,7 @@ REST API).
 |0021|Archive resource|draft||#35|
 |0022|Facets endpoint|draft||#39|
 |0023|Proof resource|draft||#40|
-|0024|Indexes removal|draft||#41|
+|0024|[Indexes removal](content/indexes-removal/index.md)|approved|2018-10-25|#41|
 |0025|Snapshot resource|draft||#42|
 
 ## Licence
