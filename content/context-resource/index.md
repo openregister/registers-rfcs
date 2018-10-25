@@ -48,7 +48,7 @@ type Context =
   , licence : Maybe String
   , rootHash : Hash
   , schema : Schema
-  , stats : Stats
+  , statistics : Statistics
   , status : Status
   , title : Maybe String
   }
@@ -161,9 +161,9 @@ type Schema =
 |Description|Human readable attribute description (e.g. `The date a record first became relevant to a register.`)|
 
 
-#### Stats
+#### Statistics
 
-* Type: Stats
+* Type: Statistics
 
 The summary of objects stored in the register. This overlaps with the Register
 resource and it is not strictly part of the metadata, it is derived from the data.
@@ -230,7 +230,7 @@ GET /context
 |`licence`| Optional String |
 |`root-hash`| Hash |
 |`schema`| List Attribute |
-|`stats`| Stats |
+|`statistics`| Statistics |
 |`status`| Status |
 |`title`| Optional String |
 
@@ -255,7 +255,7 @@ identifiers](https://github.com/multiformats/multihash/blob/master/hashtable.csv
 |`title`| Optional String |
 |`description`| Optional String |
 
-#### Stats attributes
+#### Statistics attributes
 
 |Name|Type|
 |-|-|
@@ -297,7 +297,7 @@ Content-Type: application/json
     "function-type": 18,
     "digest-length": 32
   },
-  "stats": {
+  "statistics": {
     "total-entries": 0,
     "total-items": 0,
     "total-records": 0,
