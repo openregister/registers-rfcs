@@ -50,7 +50,7 @@ records collection.
 GET /records{?name, value}
 ```
 
-Where `{?name}` is required if `{?value}` is informed.
+Where `{?name}` is required if `{?value}` is provided.
 
 
 ### Filter by strict value match
@@ -67,7 +67,7 @@ Exactly the current behaviour.
 GET /records?name={attribute-name}
 ```
 
-If the value of the given attribute name is informed (i.e. is not null) it
+If the value of the given attribute name is provided (i.e. is not null) it
 returns the record.
 
 ***
