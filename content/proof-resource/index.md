@@ -1,9 +1,9 @@
 ---
 rfc: 0023
 start_date: 2018-10-01
-decision_date:
+decision_date: 2018-10-31
 pr: openregister/registers-rfcs/pull/40
-status: draft
+status: approved
 ---
 
 # Proof resource
