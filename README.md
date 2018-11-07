@@ -28,7 +28,7 @@ REST API).
 |0015|[Schema resource](content/schema-resource/index.md)|rejected|2018-08-22|#28|
 |0016|[Blob resource](content/blob-resource/index.md)|approved|2018-09-28|#29|
 |0017|[Full item redaction](content/full-item-redacted/index.md)|approved|2018-09-25|#30|
-|0018|Context resource|draft|-|#31|
+|0018|[Context resource](content/context-resource/index.md)|approved|2018-11-07|#31|
 |0019|[Boolean datatype](content/boolean-datatype/index.md)|approved|2018-08-29|#32|
 |0020|[Blob normalisation](content/blob-normalisation/index.md)|approved|2018-09-07|#33|
 |0021|[Archive resource](content/archive-resource/index.md)|approved|2018-10-31|#35|
