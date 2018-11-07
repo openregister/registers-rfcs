@@ -1,8 +1,9 @@
 ---
 rfc: 0018
 start_date: 2018-08-13
+decision_date: 2018-11-07
 pr: openregister/registers-rfcs#31
-status: draft
+status: approved
 ---
 
 # Context resource
