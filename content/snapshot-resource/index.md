@@ -48,7 +48,7 @@ The proposal is to split both needs into dedicated resources.
 
 ## Explanation
 
-Let's define “snapshot” to be the set of most recent entries for each unique key.
+Let's define “snapshot” as a set containing the most recent entry for each key.
 
 ```elm
 type Snapshot =
