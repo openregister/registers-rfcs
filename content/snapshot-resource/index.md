@@ -44,7 +44,12 @@ the data”. The second is “plumbing” in the sense of “let me handle the l
 level bits myself”.
 
 The result is tension between these two needs and an ill-defined concept.
-The proposal is to split both needs into dedicated resources.
+
+Finally, there is a discrepancy of structure between JSON and CSV
+serialisations and not a strong reason for being that way.
+
+The proposal is to split both needs into dedicated resources and to make
+records converge across serialisation.
 
 ## Explanation
 
@@ -186,7 +191,8 @@ GET /records/{id}
 The record resource MUST be a JSON object with the data for the record. It
 MUST also have the key of the entry using the reserved attribute `_id`. Given
 that an attribute name is of type `Name`, it is not possible to have a clash
-with `_id`.
+with `_id` (underscores (`_`) are not allowed as the first character for a
+type `Name`).
 
 ***
 **EXAMPLE:**
