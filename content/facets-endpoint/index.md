@@ -13,6 +13,10 @@ status: draft
 This RFC proposes to change the endpoint for the records' “facets” to simplify
 path handling.
 
+The facets requirement is not essential for a Register to operate so this RFC
+proposes relaxing the specification and making its implementation optional.
+
+
 ## Motivation
 
 Currently the REST API for facets uses a path structure that overlaps with the
@@ -60,30 +64,6 @@ GET /records?name={attribute-name}&value={attribute-value}
 ```
 
 Exactly the current behaviour.
-
-### Filter by name
-
-```
-GET /records?name={attribute-name}
-```
-
-If the value of the given attribute name is provided (i.e. is not null) it
-returns the record.
-
-***
-**EXAMPLE:**
-
-For example, to get all records with an end date in the country register:
-
-```http
-GET /records?name=end-date HTTP/1.1
-Host: country.register.gov.uk
-Accept: application/json
-```
-***
-
-This RFC does not address the problem of querying the negated version of the
-above example.
 
 
 ### Backwards compatibility
