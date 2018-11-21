@@ -93,7 +93,7 @@ type Record =
 ```
 
 Note that the attribute `data` holds the same type of data structure as the
-blob. The resason for not using the blob here is because this opens the door
+blob. The reason for not using the blob here is because this opens the door
 to return data that is not a perfect match with the blob. For example, the RFC
 draft for removing fields would benefit from this flexibility.
 
