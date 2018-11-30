@@ -1,9 +1,9 @@
 ---
 rfc: 0022
 start_date: 2018-09-28
-decision_date:
+decision_date: 2018-11-30
 pr: openregisters/registers-rfc#39
-status: draft
+status: approved
 ---
 
 # Facets endpoint
