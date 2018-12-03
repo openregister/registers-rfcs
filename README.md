@@ -32,10 +32,10 @@ REST API).
 |0019|[Boolean datatype](content/boolean-datatype/index.md)|approved|2018-08-29|#32|
 |0020|[Blob normalisation](content/blob-normalisation/index.md)|approved|2018-09-07|#33|
 |0021|[Archive resource](content/archive-resource/index.md)|approved|2018-10-31|#35|
-|0022|[Facets endpoint](content/facets-endpoint/index.md)|approved||#39|
+|0022|[Facets endpoint](content/facets-endpoint/index.md)|approved|2018-10-30|#39|
 |0023|[Proof resource](content/proof-resource/index.md)|approved|2018-10-31|#40|
 |0024|[Indexes removal](content/indexes-removal/index.md)|approved|2018-10-25|#41|
-|0025|Snapshot resource|draft||#42|
+|0025|[Snapshot resource](content/snapshot-resource/index.md)|approved|2018-10-30|#42|
 
 ## Licence
 

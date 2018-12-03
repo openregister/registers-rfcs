@@ -1,9 +1,9 @@
 ---
 rfc: 0025
 start_date: 2018-10-03
-decision_date:
+decision_date: 2018-10-30
 pr: openregister/registers-rfcs#42
-status: draft
+status: approved
 ---
 
 # Snapshot resource
