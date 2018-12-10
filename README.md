@@ -37,7 +37,7 @@ REST API).
 |0024|[Indexes removal](content/indexes-removal/index.md)|approved|2018-10-25|#41|
 |0025|[Snapshot resource](content/snapshot-resource/index.md)|approved|2018-10-30|#42|
 |0026|Adopting OpenAPI|draft|-|#43|
-|0027|Blob collection resource|draft|-|#44|
+|0027|[Blob collection resource](content/blob-collection-resource/index.md)|approved|2018-12-10|#44|
 
 ## Licence
 

@@ -1,9 +1,9 @@
 ---
 rfc: 0027
 start_date: 2018-12-10
-decision_date:
+decision_date: 2018-12-10
 pr: openregister/registers-rfcs#44
-status: draft
+status: approved
 ---
 
 # Blob collection resource
